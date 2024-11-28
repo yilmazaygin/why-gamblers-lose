@@ -1,12 +1,13 @@
 import random # Importing the random module to generate random numbers
 
-class RouletteTable: # The RouletteTable class
-    european_wheel = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26]
-    payrates = {"Number":36, "Color":2, "Odd/Even":2, "Low/High":2, "Column":3, "Dozen":3} # The payrates for the different types of bets
+european_wheel = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26]
+payrates = {"Number":36, "Color":2, "Odd/Even":2, "Low/High":2, "Column":3, "Dozen":3} # The payrates for the different types of bets
 
-    def __init__(self, payrates, wheel):
-        self.payrates = self.payrates 
-        self.wheel = self.european_wheel
+
+class RouletteTable: # The RouletteTable class
+    def __init__(self):
+        self.payrates = payrates 
+        self.wheel = european_wheel
 
     def spin_the_wheel(self): # The spin_the_wheel method
         return random.choice(self.wheel)
