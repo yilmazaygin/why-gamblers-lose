@@ -4,9 +4,11 @@ european_wheel = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8,
 payrates = {"Number":36, "Color":2, "Odd/Even":2, "Low/High":2, "Column":3, "Dozen":3} # The payrates for the different types of bets
 
 class RouletteTable: # The RouletteTable class
-    def __init__(self):
+    def __init__(self, max_bet, min_bet):
         self.payrates = payrates 
         self.wheel = european_wheel
+        self.max_bet = max_bet
+        self.min_bet = min_bet
 
     def spin_the_wheel(self): # The spin_the_wheel method
         return random.choice(self.wheel)
