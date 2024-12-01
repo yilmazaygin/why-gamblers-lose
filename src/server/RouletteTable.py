@@ -16,7 +16,7 @@ class RouletteTable: # The RouletteTable class
         properties = {'Number': None, 'Color': None, 'Odd/Even': None, 'Low/High': None, 'Column': None, 'Dozen': None}
         red_numbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
 
-        if spun_number is {0}:
+        if spun_number == 0:
             properties = {'Number': spun_number, 'Color': 'Green', 'Odd/Even': 'N/A', 'Low/High': 'N/A', 'Column': 'N/A', 'Dozen': 'N/A'}
             return properties
         
