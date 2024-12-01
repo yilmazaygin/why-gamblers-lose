@@ -12,7 +12,7 @@ class Player:
         self.bet_history = []
         self.current_bal = starting_bal
 
-    def place_bet(self, number):
+    def place_bet(self):
         if self.current_bal <= self.stop_loss:
             return "You have reached your stop loss limit. You cannot place any more bets."
         if self.current_bal >= self.stop_win:
