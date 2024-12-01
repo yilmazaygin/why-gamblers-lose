@@ -31,5 +31,5 @@ class Player:
         self.bet_history.append() # Add a new dictionary to the bet_history list
         self.bet_history[-1]["Bet Amount"] = bet_amount 
         self.bet_history[-1]["Bet Type"] = bet_placement
-        self.bet_history[-1]["Bet Condition"] = bet_placement == number
+        self.bet_history[-1]["Bet Condition"] = bet_placement 
         pass
