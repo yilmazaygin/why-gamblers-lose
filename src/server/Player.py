@@ -1,13 +1,13 @@
 import RouletteTable
 import stratsfile
 class Player:
-    def __init__(self, starting_bal, starting_bet, stop_win, stop_loss, bet_amount_strategy, bet_placement_strategy):
+    def __init__(self, starting_bal, starting_bet, stop_win, stop_loss, bet_amount_strategy, bet_color):
         self.starting_bal = starting_bal
         self.starting_bet = starting_bet
         self.stop_win = stop_win
         self.stop_loss = stop_loss
         self.bet_amount_strategy = stratsfile.bet_amount_strategies[bet_amount_strategy]
-
+        self.bet_color = bet_color
         self.bet_history = []
         self.current_bal = starting_bal
 
@@ -20,7 +20,6 @@ class Player:
             return False
     
         bet_amount = self.bet_amount_strategy(self)
-        
         if self.current_bal < bet_amount:
             return False
 
