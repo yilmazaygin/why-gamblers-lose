@@ -6,7 +6,9 @@ bet = {"Round Number": 0,
        "Balance After Bet": 0,
        }
 
-bet_history = []
+
+bet_amount_strategies = dict()
+
 
 def all_in(self): # Goes all in every time
     return self.balance
@@ -19,10 +21,11 @@ def constant_proportion(self): # Bets the same proportion of the balance every t
     return self.balance * self.proportion
 
 def martingale(self): # Doubles the bet every time it loses
-    if self.bet_history == []:
+    if not self.bet_history:
         return self.starting_bet
     
     return self.bet_history[-1]["Bet Amount"] * 2 if self.bet_history[-1]["Bet Condition"] == False else self.starting_bet
+
 
 def reverse_martingale(self): # Doubles the bet every time it wins
     if self.bet_history == []:
@@ -170,3 +173,5 @@ def twenty_four_numbers(self): # Bets on 24 numbers
     pass
     
 
+bet_amount_strategies['martingale'] = martingale
+bet_amount_strategies['flat_bet'] = flat_bet
