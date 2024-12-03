@@ -1,4 +1,5 @@
 import random
+import Player 
 
 class Baccarat: 
     def __init__(self) -> None:
@@ -77,6 +78,3 @@ class Baccarat:
             return "Banker Wins!"
         else:
             return "Tie!"
-
-game = Baccarat()
-print(game.play_game())
