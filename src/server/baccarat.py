@@ -1,7 +1,6 @@
 import random
 import Player
 import betamountstrats
-import logicstrats
 
 class Baccarat: # Baccarat Class
     payrates = {"Player": 2, "Tie": 9, "Banker": 1.95}
@@ -115,11 +114,17 @@ class Baccarat: # Baccarat Class
             for bet in player.bet_history: print(bet) 
             player.reset_player() # Resetting the player for the next simulation
             self.game_history = [] # Resetting the game history for the next simulation
-            
-            
+
+    def random_player_or_banker(self):
+        return random.choice(("Player","Banker"))
+
+    def last_winner(self):
+        if not self.game_history:
+            return random.choice(("Player","Banker"))
+        return self.game_history[-1]
             
 bc = Baccarat(3)
-ali = Player.Player(500, 10, 1000, 0, betamountstrats.martingale, logicstrats.BaccaratLogics.random_player_or_banker)
-bc.full_baccarat_simulator(ali, 2)
+ali = Player.Player(500, 10, 550, 450, betamountstrats.martingale, bc.last_winner, None)
+bc.full_baccarat_simulator(ali, 1)
 for sim in bc.simulation_history:
     print(sim)

@@ -1,7 +1,6 @@
 import random
 import Player
 import betamountstrats
-import logicstrats
 
 class Roulette:
     european_wheel = (0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26)
@@ -76,11 +75,19 @@ class Roulette:
             player.reset_player() # Resetting the player for the next simulation
             self.game_history = [] # Resetting the game history for the next simulation
         
-    def random_color(self):
-        return random.choice(["Red", "Black"])
+    def random_that(self, that:tuple):
+        return random.choice(that) # that must be a tuple of the following: ("Red", "Black"), ("Even", "Odd"), ("Low", "High") ...
+    
+    def always_that(self, that:str):
+        return that # that must be one of the following: "Red", "Black", "Even", "Odd", "Low", "High" ...
 
-ali = Player.Player(500, 10, 550, 450, betamountstrats.martingale, Roulette.random_color)
+    def last_winner_attr(self, attr:str):
+        if not self.game_history:
+            return random.choice(("Red","Black"))
+        return self.game_history[-1][attr]        
+
 rt = Roulette(Roulette.european_wheel)
-rt.full_roulette_simulator(ali, 3)
+ali = Player.Player(500, 10, 550, 450, betamountstrats.martingale, rt.last_winner_attr, "Color")
+rt.full_roulette_simulator(ali, 1)
 for sim in rt.simulation_history:
     print(sim)
