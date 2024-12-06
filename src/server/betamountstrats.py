@@ -1,31 +1,14 @@
-bet = {"Round Number": 0, 
-       "Bet Amount": 50, 
-       "Bet Type": 0,
-       "Balance Before Bet": 0,
-       "Bet Condition": 0,
-       "Balance After Bet": 0,
-       }
-
-
-bet_amount_strategies = dict()
-
-
 def all_in(self): # Goes all in every time
-    return self.balance
+    return self.current_bal
 
 def flat_bet(self): # Always bets the same amount
     return self.starting_bet
-
-# Needs a proportion to work
-def constant_proportion(self): # Bets the same proportion of the balance every time
-    return self.balance * self.proportion
 
 def martingale(self): # Doubles the bet every time it loses
     if not self.bet_history:
         return self.starting_bet
     
     return self.bet_history[-1]["Bet Amount"] * 2 if self.bet_history[-1]["Bet Condition"] == False else self.starting_bet
-
 
 def reverse_martingale(self): # Doubles the bet every time it wins
     if self.bet_history == []:
@@ -142,6 +125,9 @@ def reverse_paroli(self): # Basically reverse martingale but goes back to the st
         else:
             return self.starting_bet
         
+###############
+
+
 def labouchere(self): # Adds the first and last numbers of a sequence to get the next bet, removes the numbers after a win, adds the last bet to the sequence after a loss
     if len(self.sequence) == 0:
         return "Empty Sequence"
@@ -161,17 +147,6 @@ def labouchere(self): # Adds the first and last numbers of a sequence to get the
         
         return self.sequence[0] + self.sequence[-1]
 
-###############################
-    
-def james_bond(self): # Bets 20 on 0, 14 on 19-36, 5 on 13-18
-    pass
-
-def andrucci(self): # Bets on a random number that has come up more often than others
-    pass
-
-def twenty_four_numbers(self): # Bets on 24 numbers
-    pass
-    
-
-bet_amount_strategies['martingale'] = martingale
-bet_amount_strategies['flat_bet'] = flat_bet
+# Needs a proportion to work
+def constant_proportion(self): # Bets the same proportion of the balance every time
+    return self.balance * self.proportion

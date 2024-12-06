@@ -1,15 +1,18 @@
 import random
+import Player
+import betamountstrats
+import logicstrats
 
-european_wheel = (0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26)
-american_wheel = (0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 37, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2)
-triplezero_wheel= (38, 0, 37, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26)
-payrates = {"Straight":36, "Split":18, "Street":12, "Corner":9, "Five-Line":7, "Six-Line":6, "Column":3, "Dozen":3, "Red/Black":2, "Odd/Even":2, "Low/High":2, }
+class Roulette:
+    european_wheel = (0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26)
+    american_wheel = (0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 37, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2)
+    triplezero_wheel= (38, 0, 37, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26)
+    payrates = {"Straight":36, "Split":18, "Street":12, "Corner":9, "Five-Line":7, "Six-Line":6, "Column":3, "Dozen":3, "Red/Black":2, "Odd/Even":2, "Low/High":2, }
 
-class RouletteTable:
-    def __init__(self,  wheel_type, max_bet, min_bet):
+    def __init__(self, wheel_type):
         self.wheel_type = wheel_type
-        self.max_bet = max_bet
-        self.min_bet = min_bet
+        self.game_history = []
+        self.simulation_history = []
 
     def spin_the_wheel(self):
         return random.choice(self.wheel_type)
@@ -38,3 +41,46 @@ class RouletteTable:
             properties['Dozen'] = '3rd'
 
         return properties
+
+    def roulette_simulator(self, player):
+        print("Player Start Balance:", player.current_bal)
+        game_condition = True
+
+        while game_condition:
+            can_player_bet = player.place_bet()  # Bet is already deducted here
+            if not can_player_bet:
+                game_condition = False
+                break
+            
+            num = self.spin_the_wheel()
+            num_properties = self.check_spun_number_properties(num)
+
+            if player.bet_history[-1]["Bet Place"] in num_properties.values():
+                player.current_bal += player.bet_history[-1]["Bet Amount"] * 2
+                player.bet_history[-1]["Bet Condition"] = True
+            else:
+                player.bet_history[-1]["Bet Condition"] = False
+
+            self.game_history.append(num_properties)
+
+        self.simulation_history.append({"Simulation No": None,"Player's Starting Balance": player.starting_balance, "Player's Ending Balance": player.current_bal})
+        print("Player's Ending Balance:", player.current_bal)
+    
+    def full_roulette_simulator(self, player, simulation_times:int):
+        for simulation in range(simulation_times):
+            Roulette.roulette_simulator(self, player)
+            self.simulation_history[simulation]["Simulation No"] = simulation + 1
+            print(f"Simulation No:{simulation + 1}")
+            for game in self.game_history: print(game) 
+            for bet in player.bet_history: print(bet) 
+            player.reset_player() # Resetting the player for the next simulation
+            self.game_history = [] # Resetting the game history for the next simulation
+        
+    def random_color(self):
+        return random.choice(["Red", "Black"])
+
+ali = Player.Player(500, 10, 550, 450, betamountstrats.martingale, Roulette.random_color)
+rt = Roulette(Roulette.european_wheel)
+rt.full_roulette_simulator(ali, 3)
+for sim in rt.simulation_history:
+    print(sim)
