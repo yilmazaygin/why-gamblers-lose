@@ -55,7 +55,7 @@ class Roulette:
             num_properties = self.check_spun_number_properties(num)
 
             if player.bet_history[-1]["Bet Place"] in num_properties.values():
-                player.current_bal += player.bet_history[-1]["Bet Amount"] * 2
+                player.current_bal += player.bet_history[-1]["Bet Amount"] * 2 #!!!!Edit this line to reflect the payrate of the bet
                 player.bet_history[-1]["Bet Condition"] = True
             else:
                 player.bet_history[-1]["Bet Condition"] = False
