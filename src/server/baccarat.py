@@ -1,27 +1,26 @@
 import random
-import Player
-import betamountstrats
+import Player, betamountstrats
 
 class Baccarat: # Baccarat Class
     payrates = {"Player": 2, "Tie": 9, "Banker": 1.95}
 
-    def __init__(self, deck_amount): # Constructor
+    def __init__(self, deck_amount:int): # Constructor
         self.deck_amount = deck_amount
         self.simulation_history = []
         self.game_history = []
 
-    def deck_creator(self, deck_amount): # Deck Creator, returns the deck_amount times the deck
+    def deck_creator(self, deck_amount:int): # Deck Creator, returns the deck_amount times the deck
         suits = ["Spades", "Hearts", "Clubs", "Diamonds"]
         ranks = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"]
         deck = [rank + " of " + suit for suit in suits for rank in ranks]
         deck = deck * deck_amount
         return deck
 
-    def shuffle_deck(self, deck): # Shuffles the Deck, returns the shuffled deck
+    def shuffle_deck(self, deck:list): # Shuffles the Deck, returns the shuffled deck
         random.shuffle(deck)
         return deck
 
-    def value_of_hand(self, hand): # Calculates the value of the hand, returns the value
+    def value_of_hand(self, hand:list): # Calculates the value of the hand, returns the value
         value = 0
         values = {"Ace":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "10":0, "Jack":0, "Queen":0, "King":0}
         for card in hand:
@@ -29,13 +28,13 @@ class Baccarat: # Baccarat Class
             value += values[card_value]
         return value % 10
 
-    def player_play(self, hand_value): # Player Play Logic, returns True or False for hitting
+    def player_play(self, hand_value:int): # Player Play Logic, returns True or False for hitting
         if hand_value in [0, 1, 2, 3, 4, 5]:
             return True
         elif hand_value in [6, 7, 8, 9]:
             return False
 
-    def banker_play(self, hand_value, player_third_card=None): # Banker Play Logic, returns True or False for hitting
+    def banker_play(self, hand_value:int, player_third_card=None): # Banker Play Logic, returns True or False for hitting
         if hand_value in [0, 1, 2]:
             return True
         elif hand_value == 3:
@@ -51,10 +50,10 @@ class Baccarat: # Baccarat Class
         else:
             return False
 
-    def deal_hand(self, deck): # Deals the hand, returns the hand
+    def deal_hand(self, deck:list): # Deals the hand, returns the hand
         return [deck.pop(), deck.pop()]
         
-    def baccarat_simulator(self, player): # Baccarat Simulator for one player, one time
+    def baccarat_simulator(self, player:object): # Baccarat Simulator for one player, one time
         deck = self.deck_creator(8)
         deck = self.shuffle_deck(deck)
 
@@ -106,7 +105,7 @@ class Baccarat: # Baccarat Class
         self.simulation_history.append({"Simulation No": None,"Player's Starting Balance": player.starting_balance, "Player's Ending Balance": player.current_bal})
         print("Player's Ending Balance:", player.current_bal)
         
-    def full_baccarat_simulator(self, player, simulation_times:int): # Full Baccarat Simulator for one player, multiple times
+    def full_baccarat_simulator(self, player:object, simulation_times:int): # Full Baccarat Simulator for one player, multiple times
         for simulation in range(simulation_times):
             Baccarat.baccarat_simulator(self, player)
             self.simulation_history[simulation]["Simulation No"] = simulation + 1

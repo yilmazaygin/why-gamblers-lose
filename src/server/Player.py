@@ -20,6 +20,7 @@ class Player:
 
         next_bet_amount = self.bet_amount_strategy(self)
         if next_bet_amount > self.current_bal: return False
+        if self.bet_placement_strategy == None: return True # !!!!
         if self.bps_argument == None:
             next_bet_placement = self.bet_placement_strategy()
         else:
