@@ -137,7 +137,7 @@ class BlackJack:
         dealer_rank = get_rank(dealer_hand[0])
         hand_value = self.value_of_hand(hand)
 
-        if player_ranks[0] == player_ranks[1]: # Pairs, splitting hands
+        if len(hand) == 2 and player_ranks[0] == player_ranks[1]: # Pairs, splitting hands
             rank = player_ranks[0]
             if rank == "Ace": return "Split"
             if rank == "10": return "Stand"
@@ -185,8 +185,6 @@ class BlackJack:
             return "Double" if dealer_rank in ["3", "4", "5", "6"] else "Hit"
 
         return "Hit" # Default action
-
-
 
 
 ali = Player.Player(1000, 10, 1050, 900, betamountstrats.flat_bet, None, None)
