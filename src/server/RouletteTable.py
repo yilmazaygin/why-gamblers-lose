@@ -7,7 +7,7 @@ class Roulette:
     triplezero_wheel= (38, 0, 37, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26)
     payrates = {"Straight":36, "Split":18, "Street":12, "Corner":9, "Five-Line":7, "Six-Line":6, "Column":3, "Dozen":3, "Red/Black":2, "Odd/Even":2, "Low/High":2, }
 
-    def __init__(self, wheel_type:str):
+    def __init__(self, wheel_type: str):
         self.wheel_type = wheel_type
         self.game_history = []
         self.simulation_history = []
@@ -15,7 +15,7 @@ class Roulette:
     def spin_the_wheel(self):
         return random.choice(self.wheel_type)
     
-    def check_spun_number_properties(self, spun_number:int):
+    def check_spun_number_properties(self, spun_number: int):
         properties = {'Number': None, 'Color': None, 'Odd/Even': None, 'Low/High': None, 'Column': None, 'Dozen': None}
         red_numbers = (1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36)
 
@@ -40,7 +40,7 @@ class Roulette:
 
         return properties
 
-    def roulette_simulator(self, player:object):
+    def roulette_simulator(self, player: object):
         print("Player Start Balance:", player.current_bal)
         game_condition = True
 
@@ -64,7 +64,7 @@ class Roulette:
         self.simulation_history.append({"Simulation No": None,"Player's Starting Balance": player.starting_balance, "Player's Ending Balance": player.current_bal})
         print("Player's Ending Balance:", player.current_bal)
     
-    def full_roulette_simulator(self, player:object, simulation_times:int):
+    def full_roulette_simulator(self, player: object, simulation_times: int):
         for simulation in range(simulation_times):
             Roulette.roulette_simulator(self, player)
             self.simulation_history[simulation]["Simulation No"] = simulation + 1
@@ -74,13 +74,13 @@ class Roulette:
             player.reset_player() # Resetting the player for the next simulation
             self.game_history = [] # Resetting the game history for the next simulation
         
-    def random_that(self, that:tuple):
+    def random_that(self, that: tuple):
         return random.choice(that) # that must be a tuple of the following: ("Red", "Black"), ("Even", "Odd"), ("Low", "High") ...
     
-    def always_that(self, that:str):
+    def always_that(self, that: str):
         return that # that must be one of the following: "Red", "Black", "Even", "Odd", "Low", "High" ...
 
-    def last_winner_attr(self, attr:str):
+    def last_winner_attr(self, attr: str):
         if not self.game_history:
             return random.choice(("Red","Black"))
         return self.game_history[-1][attr]        

@@ -2,7 +2,7 @@ import random
 import Player, betamountstrats
 
 class BlackJack:
-    def __init__(self, deck_amount:int, other_player_amount:int, rules=None):
+    def __init__(self, deck_amount: int, other_player_amount: int, rules=None):
         self.deck_amount = deck_amount
         self.other_player_amount = other_player_amount # Number of other players in the game, 0 - 6 other players is the range
 
@@ -25,18 +25,18 @@ class BlackJack:
 
         self.rules = {**default_rules, **(rules or {})}
 
-    def deck_creator(self, deck_amount:int):
+    def deck_creator(self, deck_amount: int):
         suits = ["Spades", "Hearts", "Clubs", "Diamonds"]
         ranks = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"]
         deck = [rank + " of " + suit for suit in suits for rank in ranks]
         return deck * deck_amount
 
-    def shuffle_deck(self, deck:list):
+    def shuffle_deck(self, deck: list):
         random.shuffle(deck)
         return deck
 
     @staticmethod
-    def value_of_hand(hand:list):
+    def value_of_hand(hand: list):
         values = {"2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10, "Jack": 10, "Queen": 10, "King": 10, "Ace": 1}
         total = 0
         ace_count = 0
@@ -54,7 +54,7 @@ class BlackJack:
         else:
             return total
     
-    def blackjack_simulator(self, player):
+    def blackjack_simulator(self, player: object):
         deck = self.deck_creator(self.deck_amount)
         deck = self.shuffle_deck(deck)
 

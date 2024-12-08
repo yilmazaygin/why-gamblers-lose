@@ -2,10 +2,12 @@ import random
 import Player, betamountstrats
 
 class Bingo:
-    def __init__(self, other_players: int):
-        balls = list(range(1, 76))
-        self.active_pool = balls
+    def __init__(self, other_players: int, rounds_to_simulate: int):
         self.other_players = other_players
+        self.rounds_to_simulate = rounds_to_simulate
+        
+        self.balls = list(range(1, 76))
+        self.active_pool = self.balls
 
     def create_card(self):
         B = random.sample(range(1, 16), 5)
@@ -38,7 +40,7 @@ class Bingo:
         
         return False
 
-    def print_card(self, card):
+    def print_card(self, card: list):
         print("+" + "-" * 21 + "+")
         print("|  B   I   N   G   O  |")
         print("+" + "-" * 21 + "+")
@@ -84,7 +86,9 @@ class Bingo:
                 print("\nNo more balls! Game ends in a draw.")
                 break
 
+    def full_simulate_bingo(self):
+        pass
 
-bg = Bingo(2)
+bg = Bingo(2, 10)
 ali = Player.Player(500, 1, 550, 450, betamountstrats.martingale, None, None)
 bg.simulate_bingo(ali)
