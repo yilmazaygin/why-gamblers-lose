@@ -1,16 +1,30 @@
 import flask
 from flask import request, Response
+<<<<<<< HEAD
 import json, sys
 sys.path.append("C:\\Users\\Bilgi\\OneDrive\\Masaüstü\\whygamblerslose\\src\\server")
 import Player, baccarat, roulette
 
+=======
+import json
+import sys
+import  flask_cors
+
+sys.path.append("C:\\Users\\onurb\\OneDrive\\Masaüstü\\why-gamblers-lose\\src\\server")
+import Player
+import baccarat
+>>>>>>> c81155eff029eeb94ce2d15630056dc8888c34c2
 from betamountstrats import betamountstrats_dict
 from baccarat import baccarat_logics_dict
 from roulette import roulette_logics_dict
 
+
 app = flask.Flask(__name__)
 int_params = ["starting_bal", "starting_bet", "stop_win", "stop_loss", "simulation_times"]
 str_params = ["bet_amount_strategy", "bet_placement_strategy", "bps_argument"]
+
+flask_cors.CORS(app)
+
 
 def get_param(param):
     parametre = request.args.get(param)
