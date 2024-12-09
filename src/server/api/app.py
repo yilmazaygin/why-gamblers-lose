@@ -1,13 +1,11 @@
 import flask
 from flask import request, Response
-import json
-import sys
+import json, sys
 sys.path.append("C:\\Users\\Bilgi\\OneDrive\\Masaüstü\\whygamblerslose\\src\\server")
-import Player
-import baccarat
+import Player, baccarat, roulette
+
 from betamountstrats import betamountstrats_dict
 from baccarat import baccarat_logics_dict
-import roulette
 from roulette import roulette_logics_dict
 
 app = flask.Flask(__name__)
@@ -51,6 +49,7 @@ def simulate_endpoint_roulette():
     bet_amount_strategy = get_param("bet_amount_strategy")
     bet_placement_strategy = get_param("bet_placement_strategy")
     bps_argument = get_param("bps_argument")
+    wheel_type = get_param("wheel_type")
 
     rl = roulette.Roulette(roulette.Roulette.european_wheel)
     plyr = Player.Player(starting_bal, starting_bet, stop_win, stop_loss, betamountstrats_dict[bet_amount_strategy], roulette_logics_dict[bet_placement_strategy], bps_argument)
@@ -62,4 +61,3 @@ def simulate_endpoint_roulette():
     # http://127.0.0.1:5000/roulette?starting_bal=500&starting_bet=10&stop_win=550&stop_loss=400&bet_amount_strategy=martingale&simulation_times=2&bet_placement_strategy=random_that&bps_argument=odd_even
 
 app.run(port=5000, debug=True)
-

@@ -123,5 +123,6 @@ class Baccarat: # Baccarat Class
             return random.choice(("Player","Banker"))
         return self.game_history[-1]
             
-baccarat_logics_dict = {"random_player_or_banker": Baccarat.random_player_or_banker
+baccarat_logics_dict = {"random_player_or_banker": Baccarat.random_player_or_banker,
+                        "last_winner": Baccarat.last_winner
                         }

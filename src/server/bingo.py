@@ -2,13 +2,13 @@ import random
 import Player, betamountstrats
 
 class Bingo:
-    def __init__(self, other_players: int, rounds_to_simulate: int):
+    def __init__(self, other_players: int, rounds_to_simulate: int, card_price: float, base_prize: float):
         self.other_players = other_players
         self.rounds_to_simulate = rounds_to_simulate
-        
+        self.card_price = card_price
+        self.base_prize = base_prize
         self.balls = list(range(1, 76))
-        self.active_pool = self.balls
-
+        
     def create_card(self):
         B = random.sample(range(1, 16), 5)
         I = random.sample(range(16, 31), 5)
@@ -19,9 +19,9 @@ class Bingo:
         card = [B, I, N, G, O]
         return card
 
-    def draw_a_ball(self):
-        drawn_ball = random.choice(self.active_pool)
-        self.active_pool.remove(drawn_ball)
+    def draw_a_ball(self, active_pool):
+        drawn_ball = random.choice(active_pool)
+        active_pool.remove(drawn_ball)
         return drawn_ball
 
     def check_drawn_ball_in_card(self, card: list, drawn_ball: int):
@@ -51,44 +51,65 @@ class Bingo:
         print("+" + "-" * 21 + "+")
         print()
 
-    def simulate_bingo(self, player: object):
+    def simulate_single_round(self, player: object):
         player_card = self.create_card()
         other_cards = [self.create_card() for _ in range(self.other_players)]
+        active_pool = self.balls[:]
+        prize_pool = self.base_prize
         
+        print(f"Prize Pool for this round: ${prize_pool}")
         print("Your Card:")
         self.print_card(player_card)
 
-        for i, card in enumerate(other_cards):
-            print(f"Player {i + 1}:")
-            self.print_card(card)
-
         while True:
-            drawn_ball = self.draw_a_ball()
+            drawn_ball = self.draw_a_ball(active_pool)
             print(f"Ball Drawn: {drawn_ball}")
 
             player_card = self.check_drawn_ball_in_card(player_card, drawn_ball)
 
             if self.check_card(player_card):
                 print("\nCongratulations! You won the Bingo!")
-                print("Your Card:")
+                print("Your Winning Card:")
                 self.print_card(player_card)
-                break
+                return "Player", prize_pool
 
             for i, card in enumerate(other_cards):
                 other_cards[i] = self.check_drawn_ball_in_card(card, drawn_ball)
                 if self.check_card(other_cards[i]):
                     print(f"\nPlayer {i + 1} (other) wins the Bingo!")
-                    print(f"Player {i + 1}'s card:")
+                    print(f"Player {i + 1}'s Winning Card:")
                     self.print_card(other_cards[i])
-                    return
+                    return f"Other Player {i + 1}", prize_pool
 
-            if not self.active_pool:
+            if not active_pool:
                 print("\nNo more balls! Game ends in a draw.")
-                break
+                return "Draw", 0
 
-    def full_simulate_bingo(self):
-        pass
+    def full_simulate_bingo(self, player: object):
+        results = {"Player": 0, "Other Players": 0, "Draw": 0}
+        total_prizes = 0
 
-bg = Bingo(2, 10)
+        for round_number in range(1, self.rounds_to_simulate + 1):
+            print(f"\n--- Round {round_number} ---")
+            winner, prize = self.simulate_single_round(player)
+            
+            if winner == "Player":
+                results["Player"] += 1
+            elif winner.startswith("Other Player"):
+                results["Other Players"] += 1
+            else:
+                results["Draw"] += 1
+            
+            total_prizes += prize
+
+        print("\n--- Simulation Results ---")
+        print(f"Rounds Simulated: {self.rounds_to_simulate}")
+        print(f"Player Wins: {results['Player']}")
+        print(f"Other Players Wins: {results['Other Players']}")
+        print(f"Draws: {results['Draw']}")
+        print(f"Total Prize Money Distributed: ${total_prizes}")
+
+# Simülasyon başlat
+bg = Bingo(other_players=58, rounds_to_simulate=10, card_price=5, base_prize=50)
 ali = Player.Player(500, 1, 550, 450, betamountstrats.martingale, None, None)
-bg.simulate_bingo(ali)
+bg.full_simulate_bingo(ali)

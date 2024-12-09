@@ -1,5 +1,6 @@
 import random
-import Player, betamountstrats
+import Player
+import betamountstrats
 
 class Roulette:
     european_wheel = (0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26)
@@ -9,8 +10,19 @@ class Roulette:
 
     def __init__(self, wheel_type: str):
         self.wheel_type = wheel_type
+
         self.game_history = []
         self.simulation_history = []
+        self.overall_game_history = []
+        self.overall_bet_history = []
+        self.overall_wins = 0 # Number of won rounds in all simulations
+        self.overall_losses = 0 # Number of lost rounds in all 
+        self.overall_colors = {"Red": 0, "Black": 0, "Green": 0}
+        self.overall_gain = 0
+        self.overall_wager = 0
+
+        self.won_sims = 0
+        self.lost_sims = 0
 
     def spin_the_wheel(self):
         return random.choice(self.wheel_type)
@@ -41,7 +53,6 @@ class Roulette:
         return properties
 
     def roulette_simulator(self, player: object):
-        print("Player Start Balance:", player.current_bal)
         game_condition = True
 
         while game_condition:
@@ -49,30 +60,41 @@ class Roulette:
             if not can_player_bet:
                 game_condition = False
                 break
-            
+            self.overall_wager += player.bet_history[-1]["Bet Amount"]
             num = self.spin_the_wheel()
             num_properties = self.check_spun_number_properties(num)
-
+            self.overall_colors[num_properties['Color']] += 1
             if player.bet_history[-1]["Bet Place"] in num_properties.values():
                 player.current_bal += player.bet_history[-1]["Bet Amount"] * 2 #!!!!Edit this line to reflect the payrate of the bet
                 player.bet_history[-1]["Bet Condition"] = True
+                self.overall_wins += 1
             else:
                 player.bet_history[-1]["Bet Condition"] = False
+                self.overall_losses += 1
 
             self.game_history.append(num_properties)
 
         self.simulation_history.append({"Simulation No": None,"Player's Starting Balance": player.starting_balance, "Player's Ending Balance": player.current_bal})
-        print("Player's Ending Balance:", player.current_bal)
     
     def full_roulette_simulator(self, player: object, simulation_times: int):
         for simulation in range(simulation_times):
+            self.overall_game_history.append([])
+            self.overall_bet_history.append([])
             Roulette.roulette_simulator(self, player)
             self.simulation_history[simulation]["Simulation No"] = simulation + 1
-            print(f"Simulation No:{simulation + 1}")
-            for game in self.game_history: print(game) 
-            for bet in player.bet_history: print(bet) 
+            if self.simulation_history[simulation]["Player's Ending Balance"] > self.simulation_history[simulation]["Player's Starting Balance"]:
+                self.won_sims += 1
+            else:
+                self.lost_sims += 1
+            
+            for game in self.game_history: 
+                self.overall_game_history[simulation].append(game)
+            for bet in player.bet_history:
+                self.overall_bet_history[simulation].append(bet)
             player.reset_player() # Resetting the player for the next simulation
             self.game_history = [] # Resetting the game history for the next simulation
+        for sim in self.simulation_history:
+            self.overall_gain += sim["Player's Ending Balance"] - sim["Player's Starting Balance"]
     
     @staticmethod
     def random_that(that: tuple):
@@ -92,3 +114,24 @@ class Roulette:
 roulette_logics_dict = {"random_that": Roulette.random_that, 
                         "always_that": Roulette.always_that, 
                         }
+
+ali = Player.Player(500, 1, 650, 0, betamountstrats.martingale, roulette_logics_dict["random_that"], "color")
+rt = Roulette(Roulette.european_wheel)
+rt.full_roulette_simulator(ali, 100)
+
+for sim in rt.simulation_history:
+    print(sim)
+
+print("Won Hands Count" ,rt.overall_wins)
+print("Lost Hands Count:", rt.overall_losses)
+print("Total Wager:", rt.overall_wager)
+print("Overall Profit:", rt.overall_gain)
+print("Sims Ended In Profit:", rt.won_sims)
+print("Sims Ended In Loss:", rt.lost_sims)
+
+x=0
+for color in rt.overall_colors:
+    print(f"{color} Count:", rt.overall_colors[color])
+    x += rt.overall_colors[color]
+for color in rt.overall_colors:
+    print(f"{color} Percentage: %", (rt.overall_colors[color]/x)*100)
