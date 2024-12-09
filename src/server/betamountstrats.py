@@ -1,3 +1,5 @@
+import roulette, baccarat
+
 def all_in(self): # Goes all in every time
     return self.current_bal
 
@@ -142,3 +144,7 @@ betamountstrats_dict = {
     "paroli": paroli,
     "reverse_paroli": reverse_paroli
 }
+
+logic_strats = {"roulette": roulette.roulette_logics_dict,
+                "baccarat": baccarat.baccarat_logics_dict
+                }
