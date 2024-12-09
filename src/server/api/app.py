@@ -60,13 +60,21 @@ def simulate_endpoint_roulette():
     bet_amount_strategy = get_param("bet_amount_strategy")
     bet_placement_strategy = get_param("bet_placement_strategy")
     bps_argument = get_param("bps_argument")
-    wheel_type = get_param("wheel_type")
+    #wheel_type = get_param("wheel_type")
 
     rl = roulette.Roulette(roulette.Roulette.european_wheel)
     plyr = Player.Player(starting_bal, starting_bet, stop_win, stop_loss, betamountstrats_dict[bet_amount_strategy], roulette_logics_dict[bet_placement_strategy], bps_argument)
     rl.full_roulette_simulator(plyr, simulation_times)
 
-    data = {"simulation_history": rl.simulation_history}
+    data = {"simulation_history": rl.simulation_history,
+            "won_games_count": rl.overall_wins,
+            "lost_games_count": rl.overall_losses,
+            "total_wager": rl.overall_wager,
+            "overall_profit": rl.overall_gain,
+            "sims_ended_in_profit": rl.won_sims,
+            "sims_ended_in_loss": rl.lost_sims
+            }
+    
     data = json.dumps(data)
     return data
     # http://127.0.0.1:5000/roulette?starting_bal=500&starting_bet=10&stop_win=550&stop_loss=400&bet_amount_strategy=martingale&simulation_times=2&bet_placement_strategy=random_that&bps_argument=odd_even
