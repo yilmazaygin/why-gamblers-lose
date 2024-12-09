@@ -131,6 +131,8 @@ class BlackJack:
     
     def basic_strategy(self, hand: list, dealer_hand: list):
         def get_rank(card):
+            if (card == 'Jack' or card == 'Queen' or card == 'King' or card == '10'):
+                return '10'
             return card.split()[0]
         
         player_ranks = [get_rank(card) for card in hand]
@@ -157,8 +159,18 @@ class BlackJack:
 
         if "Ace" in player_ranks: # Soft hands with an Ace
             if len(hand) > 2: # Soft hands with more than 2 cards
-                pass # Implement this later
-            other_card = player_ranks[0] if player_ranks[1] == "Ace" else player_ranks[1]
+                other_card = None
+                sum_of_hand = 0
+                for card in player_ranks:
+                    if card != "Ace":
+                        try:
+                            sum_of_hand += int(card)
+                        except Exception as e:
+                            raise e
+                other_card = str(sum_of_hand)
+
+            else:
+                other_card = player_ranks[0] if player_ranks[1] == "Ace" else player_ranks[1]
             
             if other_card in ["8", "9", "10"]: return "Stand"
             if other_card == "7":

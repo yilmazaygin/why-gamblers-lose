@@ -73,20 +73,22 @@ class Roulette:
             for bet in player.bet_history: print(bet) 
             player.reset_player() # Resetting the player for the next simulation
             self.game_history = [] # Resetting the game history for the next simulation
-        
-    def random_that(self, that: tuple):
-        return random.choice(that) # that must be a tuple of the following: ("Red", "Black"), ("Even", "Odd"), ("Low", "High") ...
     
-    def always_that(self, that: str):
+    @staticmethod
+    def random_that(that: tuple):
+        if that == "color":
+            return random.choice(("Red", "Black")) # that must be a tuple of the following: ("Red", "Black"), ("Even", "Odd"), ("Low", "High") ...
+        elif that == "odd_even":
+            return random.choice(("Even", "Odd"))
+        elif that == "low_high":
+            return random.choice(("Low", "High"))
+        else:
+            return random.choice("Red", "Black") 
+
+    @staticmethod
+    def always_that(that: str):
         return that # that must be one of the following: "Red", "Black", "Even", "Odd", "Low", "High" ...
 
-    def last_winner_attr(self, attr: str):
-        if not self.game_history:
-            return random.choice(("Red","Black"))
-        return self.game_history[-1][attr]        
-
-rt = Roulette(Roulette.european_wheel)
-ali = Player.Player(500, 10, 550, 450, betamountstrats.martingale, rt.last_winner_attr, "Color")
-rt.full_roulette_simulator(ali, 1)
-for sim in rt.simulation_history:
-    print(sim)
+roulette_logics_dict = {"random_that": Roulette.random_that, 
+                        "always_that": Roulette.always_that, 
+                        }

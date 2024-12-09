@@ -113,8 +113,9 @@ class Baccarat: # Baccarat Class
             for bet in player.bet_history: print(bet) 
             player.reset_player() # Resetting the player for the next simulation
             self.game_history = [] # Resetting the game history for the next simulation
-
-    def random_player_or_banker(self):
+    
+    @staticmethod
+    def random_player_or_banker():
         return random.choice(("Player","Banker"))
 
     def last_winner(self):
@@ -122,8 +123,5 @@ class Baccarat: # Baccarat Class
             return random.choice(("Player","Banker"))
         return self.game_history[-1]
             
-bc = Baccarat(3)
-ali = Player.Player(500, 10, 550, 450, betamountstrats.martingale, bc.last_winner, None)
-bc.full_baccarat_simulator(ali, 1)
-for sim in bc.simulation_history:
-    print(sim)
+baccarat_logics_dict = {"random_player_or_banker": Baccarat.random_player_or_banker
+                        }

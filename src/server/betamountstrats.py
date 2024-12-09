@@ -125,28 +125,20 @@ def reverse_paroli(self): # Basically reverse martingale but goes back to the st
         else:
             return self.starting_bet
         
-###############
 
-
-def labouchere(self): # Adds the first and last numbers of a sequence to get the next bet, removes the numbers after a win, adds the last bet to the sequence after a loss
-    if len(self.sequence) == 0:
-        return "Empty Sequence"
-
-    if not self.bet_history[-1]["Bet Condition"]:
-        self.sequence.append(self.bet_history[-1]["Bet Amount"])
-        return self.sequence[0] + self.sequence[-1]
-
-    else:  
-        if len(self.sequence) == 1:
-            bet_amount = self.sequence.pop(0)
-            return bet_amount
-        self.sequence.pop(0)
-        self.sequence.pop(-1)
-        if len(self.sequence) == 0:
-            return "Empty Sequence"
-        
-        return self.sequence[0] + self.sequence[-1]
-
-# Needs a proportion to work
-def constant_proportion(self): # Bets the same proportion of the balance every time
-    return self.balance * self.proportion
+betamountstrats_dict = {
+    "all_in": all_in,
+    "flat_bet": flat_bet,
+    "martingale": martingale,
+    "reverse_martingale": reverse_martingale,
+    "dalembert": dalembert,
+    "reverse_dalembert": reverse_dalembert,
+    "oscars_grind": oscars_grind,
+    "fibonacci": fibonacci,
+    "reverse_fibonacci": reverse_fibonacci,
+    "one_three_two_six": one_three_two_six,
+    "grand_martingale": grand_martingale,
+    "reverse_grand_martingale": reverse_grand_martingale,
+    "paroli": paroli,
+    "reverse_paroli": reverse_paroli
+}
