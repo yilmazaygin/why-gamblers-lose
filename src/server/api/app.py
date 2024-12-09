@@ -50,7 +50,7 @@ def simulate_endpoint_roulette():
     simulation_times = (get_param("simulation_times"))
     bet_amount_strategy = get_param("bet_amount_strategy")
     bet_placement_strategy = get_param("bet_placement_strategy")
-    bps_argument = str(get_param("bps_argument"))
+    bps_argument = get_param("bps_argument")
 
     rl = roulette.Roulette(roulette.Roulette.european_wheel)
     plyr = Player.Player(starting_bal, starting_bet, stop_win, stop_loss, betamountstrats_dict[bet_amount_strategy], roulette_logics_dict[bet_placement_strategy], bps_argument)
