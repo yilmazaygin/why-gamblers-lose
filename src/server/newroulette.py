@@ -108,7 +108,6 @@ class Roulette:
     def calc_data(self):
         for player in players:
             self.data["Game Data"]["Casino Profit"] += player.starting_balance - player.current_bal
-        for player in players:
             if player.current_bal > player.starting_balance:
                 self.data["Player Data"]["Profited Player's Total Gain"] += player.current_bal - player.starting_balance
     
