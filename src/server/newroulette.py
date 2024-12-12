@@ -22,18 +22,11 @@ class Roulette:
         
         self.overall_data = {
             "Overall Data": {
-                "Overall Casino Profit": 0,
                 "Overall Rounds Played": 0,
                 "Overall Wagered": 0,
                 "Overall Hands Won by Players": 0,
                 "Overall Hands Lost by Players": 0,
-                "Overall Profited Players": 0,
-                "Overall Lost Players": 0,
-                "Overall Profited Player's Total Gain": 0,
-                "Sessions Ended In Loss For Casino": 0,
-            },
-            "Average Data": {
-                
+                "Overall Casino Profit": 0
             },
         }
 
@@ -106,7 +99,7 @@ class Roulette:
                 self.data["Game Data"]["Hands Lost by Players"] += 1
         
     def calc_data(self):
-        for player in players:
+        for player in self.players:
             self.data["Game Data"]["Casino Profit"] += player.starting_balance - player.current_bal
             if player.current_bal > player.starting_balance:
                 self.data["Player Data"]["Profited Player's Total Gain"] += player.current_bal - player.starting_balance
@@ -128,62 +121,57 @@ class Roulette:
                 self.data["Player Data"]["Lost Players"] += 1
         self.calc_data()
 
-    def print_resaults(self):
-        for player in players:
+    def print_results(self):
+        for player in self.players:
             print(f"Player's Starting Balance: {player.starting_balance} - Player's Ending Balance: {player.current_bal}")
         for data in self.data:
             print(f"{data}:")
             for key, value in self.data[data].items():
                 print(f"    {key}: {value}")
 
+    def reset_data(self):
+        self.data = {
+            "Game Data": {
+                "Rounds Played": 0,
+                "Wagered": 0,
+                "Hands Won by Players": 0,
+                "Hands Lost by Players": 0,
+                "Casino Profit": 0
+            },
+            "Player Data": {
+                "Profited Players": 0,
+                "Lost Players": 0,
+                "Profited Player's Total Gain": 0
+            },
+        }
+
+        for player in self.players:
+            player.reset_player()
+        
+        self.active_players = self.players.copy()
+
     def roulette_sim_multiple(self, sim_times: int):
-        pass
+        for _ in range(sim_times):
+            self.roulette_simulator()
+            for key, value in self.data["Game Data"].items():
+                self.overall_data["Overall Data"][f"Overall {key}"] += value
+            self.reset_data()
 
 def random_color():
     return random.choice(['Red', 'Black'])
 
 # Example setup
 ali = Player.Player(
-    starting_bal=500, 
-    starting_bet=10, 
-    stop_win=600, 
-    stop_loss=400, 
-    bet_amount_strategy=betamountstrats.fibonacci, 
+    starting_bal=1000, 
+    starting_bet=0, 
+    stop_win=2000, 
+    stop_loss=0, 
+    bet_amount_strategy=betamountstrats.all_in, 
     bet_placement_strategy=random_color, 
     bps_argument=None
 )
 
-veli = Player.Player(
-    starting_bal=400,
-    starting_bet=20,
-    stop_win=700,
-    stop_loss=300,
-    bet_amount_strategy=betamountstrats.martingale,
-    bet_placement_strategy=random_color,
-    bps_argument=None
-)
-
-mahmut = Player.Player(
-    starting_bal=300,
-    starting_bet=15,
-    stop_win=500,
-    stop_loss=200,
-    bet_amount_strategy=betamountstrats.flat_bet,
-    bet_placement_strategy=random_color,
-    bps_argument=None
-)
-
-sibop = Player.Player(
-    starting_bal=600,
-    starting_bet=25,
-    stop_win=1000,
-    stop_loss=500,
-    bet_amount_strategy=betamountstrats.all_in,
-    bet_placement_strategy=random_color,
-    bps_argument=None
-)
-
-players = [ali, veli, mahmut, sibop]
+players = [ali]
 rt = Roulette(utils.european_wheel, players)
-rt.roulette_simulator()
-rt.print_resaults()
+rt.roulette_sim_multiple(200000)
+print(rt.overall_data)
