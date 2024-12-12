@@ -8,7 +8,7 @@ class Roulette:
         self.data = {
             "Game Data": {
                 "Rounds Played": 0,
-                "Total Wagered": 0,
+                "Wagered": 0,
                 "Hands Won by Players": 0,
                 "Hands Lost by Players": 0,
                 "Casino Profit": 0
@@ -16,7 +16,24 @@ class Roulette:
             "Player Data": {
                 "Profited Players": 0,
                 "Lost Players": 0,
-                "Profited Players' Total Gain": 0
+                "Profited Player's Total Gain": 0
+            },
+        }
+        
+        self.overall_data = {
+            "Overall Data": {
+                "Overall Casino Profit": 0,
+                "Overall Rounds Played": 0,
+                "Overall Wagered": 0,
+                "Overall Hands Won by Players": 0,
+                "Overall Hands Lost by Players": 0,
+                "Overall Profited Players": 0,
+                "Overall Lost Players": 0,
+                "Overall Profited Player's Total Gain": 0,
+                "Sessions Ended In Loss For Casino": 0,
+            },
+            "Average Data": {
+                
             },
         }
 
@@ -70,7 +87,7 @@ class Roulette:
         for player in self.active_players[:]:
             if player.place_bet():
                 self.betted_players.append(player)
-                self.data["Game Data"]["Total Wagered"] += player.bet_history[-1]['Bet Amount']
+                self.data["Game Data"]["Wagered"] += player.bet_history[-1]['Bet Amount']
             else:
                 self.active_players.remove(player)
 
@@ -93,9 +110,9 @@ class Roulette:
             self.data["Game Data"]["Casino Profit"] += player.starting_balance - player.current_bal
         for player in players:
             if player.current_bal > player.starting_balance:
-                self.data["Player Data"]["Profited Players' Total Gain"] += player.current_bal - player.starting_balance
+                self.data["Player Data"]["Profited Player's Total Gain"] += player.current_bal - player.starting_balance
     
-    def simulator(self):
+    def roulette_simulator(self):
         while self.active_players:
             self.get_bets()
             if not self.active_players:
@@ -119,6 +136,9 @@ class Roulette:
             print(f"{data}:")
             for key, value in self.data[data].items():
                 print(f"    {key}: {value}")
+
+    def roulette_sim_multiple(self, sim_times: int):
+        pass
 
 def random_color():
     return random.choice(['Red', 'Black'])
@@ -166,5 +186,5 @@ sibop = Player.Player(
 
 players = [ali, veli, mahmut, sibop]
 rt = Roulette(utils.european_wheel, players)
-rt.simulator()
+rt.roulette_simulator()
 rt.print_resaults()
