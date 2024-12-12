@@ -20,7 +20,6 @@ class Roulette:
         self.overall_colors = {"Red": 0, "Black": 0, "Green": 0}
         self.overall_gain = 0
         self.overall_wager = 0
-
         self.won_sims = 0
         self.lost_sims = 0
 
@@ -110,7 +109,46 @@ class Roulette:
     @staticmethod
     def always_that(that: str):
         return that # that must be one of the following: "Red", "Black", "Even", "Odd", "Low", "High" ...
+    
+    def roulette_simulator_multiple_players(self, players: list):
+        i=0
+        game_condition = True
+        while game_condition:
+            active_players = [player for player in players if player.place_bet()]
+            if not active_players:
+                game_condition = False
+                break
 
+            spun_number = self.spin_the_wheel()
+            num_properties = self.check_spun_number_properties(spun_number)
+
+            for player in active_players:
+                self.overall_wager += player.bet_history[-1]["Bet Amount"]
+                if player.bet_history[-1]["Bet Place"] in num_properties.values():
+                    payrate =  2
+                    player.current_bal += player.bet_history[-1]["Bet Amount"] * payrate
+                    player.bet_history[-1]["Bet Condition"] = True
+                    self.overall_wins += 1
+                else:
+                    player.bet_history[-1]["Bet Condition"] = False
+                    self.overall_losses += 1
+
+            self.game_history.append(num_properties)
+
+        for player in players:
+            if player.current_bal > player.starting_balance:
+                self.won_sims += 1
+            else:
+                self.lost_sims += 1
+            self.overall_gain += player.current_bal - player.starting_balance
+            self.simulation_history.append({
+                "Player Name": player.name,
+                "Starting Balance": player.starting_balance,
+                "Ending Balance": player.current_bal
+            })
+
+
+    
 roulette_logics_dict = {"random_that": Roulette.random_that, 
                         "always_that": Roulette.always_that, 
                         }
@@ -130,8 +168,42 @@ print("Sims Ended In Profit:", rt.won_sims)
 print("Sims Ended In Loss:", rt.lost_sims)
 
 x=0
+
 for color in rt.overall_colors:
     print(f"{color} Count:", rt.overall_colors[color])
     x += rt.overall_colors[color]
 for color in rt.overall_colors:
     print(f"{color} Percentage: %", (rt.overall_colors[color]/x)*100)
+
+
+players = []
+for strat_name, strat_function in betamountstrats.betamountstrats_dict.items():
+    player = Player.Player(
+        starting_bal=500,
+        starting_bet=10, 
+        stop_win = 1000,
+        stop_loss = 0,
+        bet_amount_strategy=strat_function,
+        bet_placement_strategy=roulette_logics_dict["random_that"],
+        bps_argument="color"
+    )
+    player.name = strat_name
+    players.append(player)
+
+
+rt = Roulette(Roulette.european_wheel)
+rt.roulette_simulator_multiple_players(players)
+
+for player in players:
+    print(f"Player: {player.name}")
+    print(f"Starting Balance: {player.starting_balance}")
+    print(f"Ending Balance: {player.current_bal}")
+    print(f"Profit/Loss: {player.current_bal - player.starting_balance}")
+    print(f"Games Played: {len(player.bet_history)}\n")
+
+print("Won Hands Count" ,rt.overall_wins)
+print("Lost Hands Count:", rt.overall_losses)
+print("Total Wager:", rt.overall_wager)
+print("Overall Profit:", rt.overall_gain)
+print("Sims Ended In Profit:", rt.won_sims)
+print("Sims Ended In Loss:", rt.lost_sims)

@@ -26,7 +26,7 @@ class Player:
         else:
             next_bet_placement = self.bet_placement_strategy(self.bps_argument)
 
-        turns_bet = {"Bet Amount": next_bet_amount, "Bet Place": next_bet_placement, "Bet Condition": None}
+        turns_bet = {"Bet Amount": next_bet_amount, "Bet Place": next_bet_placement, "Bet Condition": None, "Balance Before Bet": self.current_bal, "Balance After Bet": self.current_bal - next_bet_amount}
         self.bet_history.append(turns_bet)
         self.current_bal -=  next_bet_amount
         return True
