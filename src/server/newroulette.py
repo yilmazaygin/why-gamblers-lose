@@ -2,38 +2,12 @@ import random
 import Player
 import utils
 import betamountstrats
+from game import Game
 
-class Roulette:
+class Roulette(Game):
     def __init__(self, wheel: tuple, players: list):
-        self.data = {
-            "Game Data": {
-                "Rounds Played": 0,
-                "Wagered": 0,
-                "Hands Won by Players": 0,
-                "Hands Lost by Players": 0,
-                "Casino Profit": 0
-            },
-            "Player Data": {
-                "Profited Players": 0,
-                "Lost Players": 0,
-                "Profited Player's Total Gain": 0
-            },
-        }
-        
-        self.overall_data = {
-            "Overall Data": {
-                "Overall Rounds Played": 0,
-                "Overall Wagered": 0,
-                "Overall Hands Won by Players": 0,
-                "Overall Hands Lost by Players": 0,
-                "Overall Casino Profit": 0
-            },
-        }
-
+        super().__init__(players)
         self.wheel = wheel
-        self.players = players
-        self.active_players = players.copy()
-        self.betted_players = []
 
     def spin_wheel(self):
         return random.choice(self.wheel)
@@ -75,35 +49,6 @@ class Roulette:
 
         return properties
 
-    def get_bets(self):
-        self.betted_players = []
-        for player in self.active_players[:]:
-            if player.place_bet():
-                self.betted_players.append(player)
-                self.data["Game Data"]["Wagered"] += player.bet_history[-1]['Bet Amount']
-            else:
-                self.active_players.remove(player)
-
-    def evaluate_bets(self, spun_number: int):
-        results = self.num_properties(spun_number)
-        for player in self.betted_players:
-            if not player.bet_history:
-                continue
-            player_bet = player.bet_history[-1]
-            bet_place = player_bet['Bet Place']
-            if bet_place in results.values():
-                winnings = player_bet['Bet Amount'] * 2
-                player.current_bal += winnings
-                self.data["Game Data"]["Hands Won by Players"] += 1
-            else:
-                self.data["Game Data"]["Hands Lost by Players"] += 1
-        
-    def calc_data(self):
-        for player in self.players:
-            self.data["Game Data"]["Casino Profit"] += player.starting_balance - player.current_bal
-            if player.current_bal > player.starting_balance:
-                self.data["Player Data"]["Profited Player's Total Gain"] += player.current_bal - player.starting_balance
-    
     def roulette_simulator(self):
         while self.active_players:
             self.get_bets()
@@ -121,35 +66,6 @@ class Roulette:
                 self.data["Player Data"]["Lost Players"] += 1
         self.calc_data()
 
-    def print_results(self):
-        for player in self.players:
-            print(f"Player's Starting Balance: {player.starting_balance} - Player's Ending Balance: {player.current_bal}")
-        for data in self.data:
-            print(f"{data}:")
-            for key, value in self.data[data].items():
-                print(f"    {key}: {value}")
-
-    def reset_data(self):
-        self.data = {
-            "Game Data": {
-                "Rounds Played": 0,
-                "Wagered": 0,
-                "Hands Won by Players": 0,
-                "Hands Lost by Players": 0,
-                "Casino Profit": 0
-            },
-            "Player Data": {
-                "Profited Players": 0,
-                "Lost Players": 0,
-                "Profited Player's Total Gain": 0
-            },
-        }
-
-        for player in self.players:
-            player.reset_player()
-        
-        self.active_players = self.players.copy()
-
     def roulette_sim_multiple(self, sim_times: int):
         for _ in range(sim_times):
             self.roulette_simulator()
@@ -163,7 +79,7 @@ def random_color():
 # Example setup
 ali = Player.Player(
     starting_bal=1000, 
-    starting_bet=0, 
+    starting_bet=50, 
     stop_win=2000, 
     stop_loss=0, 
     bet_amount_strategy=betamountstrats.all_in, 
@@ -173,5 +89,7 @@ ali = Player.Player(
 
 players = [ali]
 rt = Roulette(utils.european_wheel, players)
-rt.roulette_sim_multiple(200000)
+rt.roulette_sim_multiple(1)
 print(rt.overall_data)
+for player in players:
+    print(player.player_game_data)

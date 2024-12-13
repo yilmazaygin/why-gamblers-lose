@@ -13,6 +13,15 @@ class Player:
 
         self.current_bal = starting_bal
         self.bet_history = []
+        self.player_game_data = {
+            "ID": f"{bet_placement_strategy}.{starting_bal}.{starting_bet}",
+            "Starting Balance": self.starting_balance,
+            "Bet Amount Strategy": self.bet_amount_strategy,
+            "Bet Placement Strategy": self.bet_placement_strategy,
+            "Ending Balance": 0,
+            "Profit": 0,
+            "Rounds Played": 0
+        }
 
     def place_bet(self):
         if self.current_bal <= self.stop_loss: return False
