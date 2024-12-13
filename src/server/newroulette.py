@@ -6,7 +6,7 @@ from game import Game
 
 class Roulette(Game):
     def __init__(self, wheel: tuple, players: list):
-        super().__init__(players)
+        super().__init__(players, "Roulette")
         self.wheel = wheel
 
     def spin_wheel(self):
@@ -38,14 +38,14 @@ class Roulette(Game):
         properties['Color'] = 'Red' if spun_number in red_numbers else 'Black'
         properties['Odd/Even'] = 'Even' if spun_number % 2 == 0 else 'Odd'
         properties['Low/High'] = 'Low' if spun_number <= 18 else 'High'
-        properties['Column'] = ['1st', '2nd', '3rd'][(spun_number - 1) % 3]
+        properties['Column'] = ['1st Column', '2nd Column', '3rd Column'][(spun_number - 1) % 3]
 
         if spun_number <= 12:
-            properties['Dozen'] = '1st'
+            properties['Dozen'] = '1st Dozen'
         elif spun_number <= 24:
-            properties['Dozen'] = '2nd'
+            properties['Dozen'] = '2nd Dozen'
         else:
-            properties['Dozen'] = '3rd'
+            properties['Dozen'] = '3rd Dozen'
 
         return properties
 
@@ -73,9 +73,6 @@ class Roulette(Game):
                 self.overall_data["Overall Data"][f"Overall {key}"] += value
             self.reset_data()
 
-def random_color():
-    return random.choice(['Red', 'Black'])
-
 # Example setup
 ali = Player.Player(
     starting_bal=1000, 
@@ -83,13 +80,11 @@ ali = Player.Player(
     stop_win=2000, 
     stop_loss=0, 
     bet_amount_strategy=betamountstrats.all_in, 
-    bet_placement_strategy=random_color, 
-    bps_argument=None
+    bet_placement_strategy=utils.GeneralStrats.random_that, 
+    bps_argument=utils.roulette_utils["Color"]
 )
 
 players = [ali]
-rt = Roulette(utils.european_wheel, players)
-rt.roulette_sim_multiple(1)
+rt = Roulette(utils.roulette_utils["european_wheel"], players)
+rt.roulette_sim_multiple(100)
 print(rt.overall_data)
-for player in players:
-    print(player.player_game_data)

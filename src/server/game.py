@@ -1,5 +1,6 @@
 class Game:
-    def __init__(self, players: list):
+    def __init__(self, players: list, game_type:str):
+        self.game_type = game_type
         self.players = players
         self.active_players = players.copy()
         self.betted_players = []
@@ -67,7 +68,7 @@ class Game:
         
         self.active_players = self.players.copy()
 
-    def evaluate_bets(self, spun_number: int):
+    def evaluate_bets(self, spun_number: int): #IT ONLY DOUBLES; EDİT LATER
         results = self.num_properties(spun_number)
         for player in self.betted_players:
             if not player.bet_history:
