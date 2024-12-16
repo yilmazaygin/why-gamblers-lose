@@ -1,7 +1,6 @@
 import random
 import Player
 import utils
-import betamountstrats
 from game import Game
 
 class Roulette(Game):
@@ -79,7 +78,7 @@ ali = Player.Player(
     starting_bet=50, 
     stop_win=2000, 
     stop_loss=0, 
-    bet_amount_strategy=betamountstrats.martingale, 
+    bet_amount_strategy=utils.BetAmountStrats.martingale, 
     bet_placement_strategy=utils.GeneralStrats.random_that, 
     bps_argument=utils.roulette_utils["Color"]
 )

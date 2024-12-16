@@ -1,5 +1,5 @@
 import random
-import betamountstrats
+import utils
 
 class Player:
     def __init__(self, starting_bal, starting_bet, stop_win, stop_loss, bet_amount_strategy, bet_placement_strategy, bps_argument):
