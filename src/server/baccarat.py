@@ -1,24 +1,17 @@
 import random
-import Player, betamountstrats
+import player
+import utils
+from game import Game
 
-class Baccarat: # Baccarat Class
-    payrates = {"Player": 2, "Tie": 9, "Banker": 1.95}
-
-    def __init__(self, deck_amount: int): # Constructor
+class Baccarat(Game): # Baccarat Class
+    def __init__(self, deck_amount: int, players: list): # Constructor
+        super().__init__(players, "Baccarat") # Calls the constructor of the parent class
         self.deck_amount = deck_amount
-        self.simulation_history = []
-        self.game_history = []
 
-    def deck_creator(self, deck_amount: int): # Deck Creator, returns the deck_amount times the deck
-        suits = ["Spades", "Hearts", "Clubs", "Diamonds"]
-        ranks = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"]
-        deck = [rank + " of " + suit for suit in suits for rank in ranks]
-        deck = deck * deck_amount
-        return deck
-
-    def shuffle_deck(self, deck: list): # Shuffles the Deck, returns the shuffled deck
-        random.shuffle(deck)
-        return deck
+        self.player_hand = []
+        self.banker_hand = []
+        self.player_value = 0
+        self.banker_value = 0
 
     def value_of_hand(self, hand: list): # Calculates the value of the hand, returns the value
         value = 0
@@ -49,80 +42,64 @@ class Baccarat: # Baccarat Class
             return False
         else:
             return False
-
-    def deal_hand(self, deck: list): # Deals the hand, returns the hand
-        return [deck.pop(), deck.pop()]
         
-    def baccarat_simulator(self, player: object): # Baccarat Simulator for one player, one time
-        deck = self.deck_creator(8)
-        deck = self.shuffle_deck(deck)
+    def calc_result(self, player_value: int, banker_value: int): # Calculates the result of the game
+        if player_value > banker_value:
+            return "Player"
+        elif banker_value > player_value:
+            return "Banker"
+        else:
+            return "Tie"
 
-        print("Player Start Balance:", player.current_bal)
-        game_condition = True
-        
-        while game_condition:
-            if len(deck) <= 52:
-                game_condition = False
-                break
+    def reset_hands(self): # Resets the hands
+        self.player_hand = []
+        self.banker_hand = []
 
-            can_player_bet = player.place_bet()  # Bet is already deducted here
-            if not can_player_bet:
-                game_condition = False
-                break
+    def calc_values(self): # Calculates the values of the hands
+        self.player_value = self.value_of_hand(self.player_hand)
+        self.banker_value = self.value_of_hand(self.banker_hand)
+        return self.player_value, self.banker_value
 
-            result = None
-            player_hand = []
-            banker_hand = []
-            player_hand = self.deal_hand(deck)
-            banker_hand = self.deal_hand(deck)
-
-            player_value = self.value_of_hand(player_hand)
-            banker_value = self.value_of_hand(banker_hand)
-            
-            if self.player_play(player_value):
-                player_hand.append(deck.pop())
-                player_value = self.value_of_hand(player_hand)
-
-            if self.banker_play(banker_value, player_hand[-1] if len(player_hand) > 2 else None):
-                banker_hand.append(deck.pop())
-                banker_value = self.value_of_hand(banker_hand)
-
-            if player_value > banker_value:
-                result = "Player"
-            elif banker_value > player_value:
-                result = "Banker"
-            else:
-                result = "Tie"
-            
-            if player.bet_history[-1]["Bet Place"] == result:
-                player.current_bal += player.bet_history[-1]["Bet Amount"] * Baccarat.payrates[result]
-                player.bet_history[-1]["Bet Condition"] = True
-            else:
-                player.bet_history[-1]["Bet Condition"] = False
-
-            self.game_history.append(result)
-
-        self.simulation_history.append({"Simulation No": None,"Player's Starting Balance": player.starting_balance, "Player's Ending Balance": player.current_bal})
-        print("Player's Ending Balance:", player.current_bal)
-        
-    def full_baccarat_simulator(self, player: object, simulation_times: int): # Full Baccarat Simulator for one player, multiple times
-        for simulation in range(simulation_times):
-            Baccarat.baccarat_simulator(self, player)
-            self.simulation_history[simulation]["Simulation No"] = simulation + 1
-            print(f"Simulation No:{simulation + 1} // Game History:", self.game_history) 
-            for bet in player.bet_history: print(bet) 
-            player.reset_player() # Resetting the player for the next simulation
-            self.game_history = [] # Resetting the game history for the next simulation
+    def baccarat_deal(self, deck :list): # Deals the cards to the player and the banker
+        self.deal(deck, [self.player_hand, self.banker_hand], 2)
     
-    @staticmethod
-    def random_player_or_banker():
-        return random.choice(("Player","Banker"))
+    def if_play(self, deck: list): # If the player or the banker should play
+        if self.player_play(self.player_value):
+            self.player_hand.append(deck.pop())
+            self.player_value = self.value_of_hand(self.player_hand)
 
-    def last_winner(self):
-        if not self.game_history:
-            return random.choice(("Player","Banker"))
-        return self.game_history[-1]
-            
-baccarat_logics_dict = {"random_player_or_banker": Baccarat.random_player_or_banker,
-                        "last_winner": Baccarat.last_winner
-                        }
+        if self.banker_play(self.banker_value, self.player_hand[-1] if len(self.player_hand) > 2 else None):
+            self.banker_hand.append(deck.pop())
+            self.banker_value = self.value_of_hand(self.banker_hand)
+
+    def baccarat_simulator(self, sim_times: int): # Baccarat Simulator
+        for _ in range(sim_times):
+            deck = self.deck_creator(8)
+            deck = self.shuffle_deck(deck)
+
+            while self.active_players:
+                if len (deck) <= 52:
+                    break
+
+                self.get_bets()
+                if not self.active_players:
+                    break
+                self.data["Game Data"]["Rounds Played"] += 1
+
+                self.baccarat_deal(deck)
+                self.if_play(deck)
+                self.evaluate_bets_str(self.calc_result(self.player_value, self.banker_value))
+                self.reset_hands()
+
+            self.calc_data()
+            for key, value in self.data["Game Data"].items():
+                self.overall_data["Overall Data"][f"Overall {key}"] += value
+            self.reset_data()
+
+'''
+# Example Usage
+ali = player.Player(500, 10, 1000, 0, utils.BetAmountStrats.all_in, utils.GeneralStrats.always_that, "Banker")
+bc = Baccarat(8, [ali])
+bc.baccarat_simulator(20)
+print(bc.overall_data)
+'''

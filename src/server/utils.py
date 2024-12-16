@@ -1,32 +1,57 @@
 import random
+
+payrates = { 
+    # Payrates for each game
+    "Roulette": {
+        "Straigt": 36,
+        "Split": 18,
+        "Street": 12,
+        "Corner": 9,
+        "Five-Line": 7,
+        "Six-Line": 6,
+        "1st Column": 3, "2nd Column": 3, "3rd Column": 3,
+        "1st Dozen": 3, "2nd Dozen": 3, "3rd Dozen": 3,
+        "Odd": 2, "Even": 2,
+        "High": 2, "Low": 2,
+        "Black": 2, "Red": 2,
+
+    },
+    "Baccarat": {"Player": 2, 
+                 "Tie": 9, 
+                 "Banker": 1.95}
+}
+
 roulette_utils = {
+    # Roulette utils
     "european_wheel": (0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26),
     "american_wheel": (0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 37, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2),
     "triplezero_wheel": (38, 0, 37, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26),
-    "general_payrates": {"Straight":36, "Split":18, "Street":12, "Corner":9, "Five-Line":7, "Six-Line":6, "Column":3, "Dozen":3, "Red/Black":2, "Odd/Even":2, "Low/High":2, },
-    "Color": ("Red", "Black"),
-    "High/Low": ("High", "Low"),
-    "Odd/Even": ("Odd", "Even"),
+    "Column": ("1st Column", "2nd Column", "3rd Column"),
     "Dozen": ("1st Dozen", "2nd Dozen", "3rd Dozen"),
-    "Column": ("1st Column", "2nd Column", "3rd Column")
+    "Odd/Even": ("Odd", "Even"),
+    "High/Low": ("High", "Low"),
+    "Color": ("Red", "Black"),
     #May add streets or corners too?
 }
 
-class GeneralStrats:
-    def __init__(self):
-        pass
+baccarat_utils = {
+    # Baccarat utils
+    "Player or Banker" : ("Player", "Banker"),
+    "All Places": ("Player", "Tie", "Banker"),
+}
+
+
+class GeneralStrats: # General strategies that can be used in any game
     
     @staticmethod
-    def random_that(that: tuple):
+    def random_that(that: tuple): # Randomly chooses a value from a tuple
         return random.choice(that)
     
     @staticmethod
-    def always_that(that: str):
+    def always_that(that: str): # Always chooses a specific value, must be string
         return(that)
     
-class BetAmountStrats:
-    def __init__(self):
-        pass
+class BetAmountStrats: # Strategies for determining the bet amount
 
     @staticmethod
     def all_in(self): # Goes all in every time
@@ -168,21 +193,3 @@ class BetAmountStrats:
                 return self.starting_bet * 4
             else:
                 return self.starting_bet
-            
-
-    betamountstrats_dict = {
-        "all_in": all_in,
-        "flat_bet": flat_bet,
-        "martingale": martingale,
-        "reverse_martingale": reverse_martingale,
-        "dalembert": dalembert,
-        "reverse_dalembert": reverse_dalembert,
-        "oscars_grind": oscars_grind,
-        "fibonacci": fibonacci,
-        "reverse_fibonacci": reverse_fibonacci,
-        "one_three_two_six": one_three_two_six,
-        "grand_martingale": grand_martingale,
-        "reverse_grand_martingale": reverse_grand_martingale,
-        "paroli": paroli,
-        "reverse_paroli": reverse_paroli
-    }

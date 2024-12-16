@@ -23,13 +23,13 @@ class Player:
             "Rounds Played": 0
         }
 
-    def place_bet(self):
+    def place_bet(self): # Returns True if bet is placed, False if not
         if self.current_bal <= self.stop_loss: return False
         if self.current_bal >= self.stop_win: return False
 
         next_bet_amount = self.bet_amount_strategy(self)
         if next_bet_amount > self.current_bal: return False
-        if self.bet_placement_strategy == None: return True # !!!!
+        if self.bet_placement_strategy == None: return True # If no bet placement strategy is defined, return True. EDIT THIS LATER!
         if self.bps_argument == None:
             next_bet_placement = self.bet_placement_strategy()
         else:
@@ -40,7 +40,7 @@ class Player:
         self.current_bal -=  next_bet_amount
         return True
     
-    def reset_player(self):
+    def reset_player(self): # Resets player's balance, bet history and game data
         self.bet_history = []
         self.current_bal = self.starting_balance
         self.player_game_data = {
