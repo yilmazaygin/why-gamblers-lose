@@ -70,7 +70,7 @@ ali = player.Player(
     stop_win=2000, 
     stop_loss=0, 
     bet_amount_strategy=utils.BetAmountStrats.martingale, 
-    bet_placement_strategy=utils.GeneralStrats.always_that, 
+    bet_placement_strategy=utils.LogicStrats.always_that, 
     bps_argument="Red"
 )
 

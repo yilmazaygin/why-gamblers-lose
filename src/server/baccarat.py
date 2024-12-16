@@ -98,7 +98,7 @@ class Baccarat(Game): # Baccarat Class
 
 '''
 # Example Usage
-ali = player.Player(500, 10, 1000, 0, utils.BetAmountStrats.all_in, utils.GeneralStrats.always_that, "Banker")
+ali = player.Player(500, 10, 1000, 0, utils.BetAmountStrats.all_in, utils.LogicStrats.always_that, "Banker")
 bc = Baccarat(8, [ali])
 bc.baccarat_simulator(20)
 print(bc.overall_data)

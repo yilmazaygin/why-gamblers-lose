@@ -41,7 +41,7 @@ baccarat_utils = {
 }
 
 
-class GeneralStrats: # General strategies that can be used in any game
+class LogicStrats: # General strategies that can be used in any game
     
     @staticmethod
     def random_that(that: tuple): # Randomly chooses a value from a tuple
@@ -193,3 +193,27 @@ class BetAmountStrats: # Strategies for determining the bet amount
                 return self.starting_bet * 4
             else:
                 return self.starting_bet
+
+betamountstrats_dict = {
+    # Bet amount strategies
+    "all_in": BetAmountStrats.all_in,
+    "flat_bet": BetAmountStrats.flat_bet,
+    "martingale": BetAmountStrats.martingale,
+    "reverse_martingale": BetAmountStrats.reverse_martingale,
+    "dalembert": BetAmountStrats.dalembert,
+    "reverse_dalembert": BetAmountStrats.reverse_dalembert,
+    "oscars_grind": BetAmountStrats.oscars_grind,
+    "fibonacci": BetAmountStrats.fibonacci,
+    "reverse_fibonacci": BetAmountStrats.reverse_fibonacci,
+    "one_three_two_six": BetAmountStrats.one_three_two_six,
+    "grand_martingale": BetAmountStrats.grand_martingale,
+    "reverse_grand_martingale": BetAmountStrats.reverse_grand_martingale,
+    "paroli": BetAmountStrats.paroli,
+    "reverse_paroli": BetAmountStrats.reverse_paroli
+}
+
+logicstrats_dict = {
+    # Logic strategies
+    "random_that": LogicStrats.random_that,
+    "always_that": LogicStrats.always_that
+}
