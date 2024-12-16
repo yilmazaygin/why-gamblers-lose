@@ -79,7 +79,7 @@ ali = Player.Player(
     starting_bet=50, 
     stop_win=2000, 
     stop_loss=0, 
-    bet_amount_strategy=betamountstrats.all_in, 
+    bet_amount_strategy=betamountstrats.martingale, 
     bet_placement_strategy=utils.GeneralStrats.random_that, 
     bps_argument=utils.roulette_utils["Color"]
 )
