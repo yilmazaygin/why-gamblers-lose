@@ -1,7 +1,7 @@
 import random
-import player
 import utils
 from game import Game
+from player import Player
 
 class Roulette(Game): # Inherit from Game class
     def __init__(self, wheel: tuple, players: list, sim_times: int): # All usable wheels are in utils.roulette_utils
@@ -59,33 +59,34 @@ class Roulette(Game): # Inherit from Game class
                 spun_number = self.spin_wheel()
                 self.evaluate_bets_list(self.num_properties(spun_number))
             self.calc_data()
-            self.add_to_overall_data()
-            self.reset_data()
-
+            self.last_data()
+            if _ != self.sim_times - 1:
+                self.reset_data()
+            else:
+                for player in self.players:
+                    player.player_overall_history.append(player.player_game_data)
 
 # Example usage
-ali = player.Player(
+ali = Player(
     starting_bal=1000, 
     starting_bet=50, 
     stop_win=2000, 
     stop_loss=0, 
-    bet_amount_strategy=utils.BetAmountStrats.flat_bet, 
+    bet_amount_strategy=utils.BetAmountStrats.all_in, 
     bet_placement_strategy=utils.LogicStrats.always_that, 
     bps_argument="Red"
 )
-
-veli = player.Player(
+ali_veli = Player(
     starting_bal=1000, 
     starting_bet=50, 
-    stop_win=4000, 
+    stop_win=2000, 
     stop_loss=0, 
-    bet_amount_strategy=utils.BetAmountStrats.martingale, 
+    bet_amount_strategy=utils.BetAmountStrats.all_in, 
     bet_placement_strategy=utils.LogicStrats.always_that, 
     bps_argument="Black"
 )
 
-players = [ali, veli]
-rt = Roulette(utils.roulette_utils["european_wheel"], players, 5)
+players = [ali, ali_veli]
+rt = Roulette(utils.roulette_utils["european_wheel"], players, 100000)
 rt.roulette_simulator()
 print(rt.overall_data)
-print(rt.last_data())

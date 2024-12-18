@@ -21,7 +21,7 @@ class Player:
             "Ending Balance": 0,
             "Profit": 0,
             "Rounds Played": 0,
-            "Bet History": self.bet_history
+            "Bet History": self.bet_history,
         }
 
     def place_bet(self): # Returns True if bet is placed, False if not
@@ -51,5 +51,6 @@ class Player:
             "Ending Balance": 0,
             "Profit": 0,
             "Rounds Played": 0,
-            "Bet History": self.bet_history
+            "Bet History": self.bet_history,
+            "Wager": 0,
         }

@@ -138,16 +138,8 @@ class Game: # Game Class, contains the game data and player data. We will inheri
         random.shuffle(deck)
         return deck
     
-    def add_to_overall_data(self):
+    def last_data(self):
         for key, value in self.data["Game Data"].items():
             self.overall_data["Overall Data"][f"Overall {key}"] += value
         for key, value in self.data["Player Data"].items():
             self.overall_data["Overall Player Data"][f"Overall {key}"] += value
-        
-    def last_data(self):
-        self.new_data = {
-            "Total Different Players Simulated": len(self.players) * self.sim_times,
-            "Lost Players Percentage": f"%{(self.overall_data['Overall Player Data']['Overall Lost Players'] / (len(self.players) * self.sim_times) * 100):.1f}",  # % formatı
-            "Average Rounds Per Game": self.overall_data["Overall Data"]["Overall Rounds Played"] / self.sim_times,
-        }
-        return self.new_data
