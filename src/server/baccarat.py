@@ -4,8 +4,8 @@ import utils
 from game import Game
 
 class Baccarat(Game): # Baccarat Class
-    def __init__(self, deck_amount: int, players: list): # Constructor
-        super().__init__(players, "Baccarat") # Calls the constructor of the parent class
+    def __init__(self, deck_amount: int, players: list, sim_times: int): # Constructor
+        super().__init__(players, "Baccarat", sim_times) # Calls the constructor of the parent class
         self.deck_amount = deck_amount
 
         self.player_hand = []
@@ -72,8 +72,8 @@ class Baccarat(Game): # Baccarat Class
             self.banker_hand.append(deck.pop())
             self.banker_value = self.value_of_hand(self.banker_hand)
 
-    def baccarat_simulator(self, sim_times: int): # Baccarat Simulator
-        for _ in range(sim_times):
+    def baccarat_simulator(self): # Baccarat Simulator
+        for _ in range(self.sim_times):
             deck = self.deck_creator(8)
             deck = self.shuffle_deck(deck)
 

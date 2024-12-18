@@ -2,11 +2,14 @@ import utils
 import random
 
 class Game: # Game Class, contains the game data and player data. We will inherit this class to create different games.
-    def __init__(self, players: list, game_type:str):
+    def __init__(self, players: list, game_type:str, sim_times: int): # Initializes the game
         self.game_type = game_type
         self.players = players
+        self.sim_times =  sim_times
         self.active_players = players.copy()
         self.betted_players = []
+        self.data_history = []
+        self.new_data = {}
         self.data = {
             "Game Data": { # Game Data, will be used to store the game data of the game.
                 "Rounds Played": 0,
@@ -30,6 +33,11 @@ class Game: # Game Class, contains the game data and player data. We will inheri
                 "Overall Hands Lost by Players": 0,
                 "Overall Casino Profit": 0
             },
+            "Overall Player Data": {
+                "Overall Profited Players": 0,
+                "Overall Lost Players": 0,
+                "Overall Profited Player's Total Gain": 0
+            }
         }
 
     def calc_data(self): # Calculates the data of the game
@@ -55,6 +63,7 @@ class Game: # Game Class, contains the game data and player data. We will inheri
                 self.active_players.remove(player)
 
     def reset_data(self): # Resets the data of the game
+        self.data_history.append(self.data)
         self.data = {
             "Game Data": {
                 "Rounds Played": 0,
@@ -128,3 +137,17 @@ class Game: # Game Class, contains the game data and player data. We will inheri
     def shuffle_deck(self, deck: list): # Shuffles the Deck, returns the shuffled deck
         random.shuffle(deck)
         return deck
+    
+    def add_to_overall_data(self):
+        for key, value in self.data["Game Data"].items():
+            self.overall_data["Overall Data"][f"Overall {key}"] += value
+        for key, value in self.data["Player Data"].items():
+            self.overall_data["Overall Player Data"][f"Overall {key}"] += value
+        
+    def last_data(self):
+        self.new_data = {
+            "Total Different Players Simulated": len(self.players) * self.sim_times,
+            "Lost Players Percentage": f"%{(self.overall_data['Overall Player Data']['Overall Lost Players'] / (len(self.players) * self.sim_times) * 100):.1f}",  # % formatı
+            "Average Rounds Per Game": self.overall_data["Overall Data"]["Overall Rounds Played"] / self.sim_times,
+        }
+        return self.new_data

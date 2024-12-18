@@ -4,8 +4,8 @@ import utils
 from game import Game
 
 class Roulette(Game): # Inherit from Game class
-    def __init__(self, wheel: tuple, players: list): # All usable wheels are in utils.roulette_utils
-        super().__init__(players, "Roulette") 
+    def __init__(self, wheel: tuple, players: list, sim_times: int): # All usable wheels are in utils.roulette_utils
+        super().__init__(players, "Roulette", sim_times) 
         self.wheel = wheel
 
     def spin_wheel(self): # Spins the wheel and returns the spun number
@@ -48,8 +48,9 @@ class Roulette(Game): # Inherit from Game class
 
         return properties
 
-    def roulette_simulator(self, sim_times: int): # Simulates the roulette game, can be run multiple times
-        for _ in range(sim_times):
+
+    def roulette_simulator(self): # Simulates the roulette game, can be run multiple times
+        for _ in range(self.sim_times):
             while self.active_players:
                 self.get_bets()
                 if not self.active_players:
@@ -58,24 +59,33 @@ class Roulette(Game): # Inherit from Game class
                 spun_number = self.spin_wheel()
                 self.evaluate_bets_list(self.num_properties(spun_number))
             self.calc_data()
-            for key, value in self.data["Game Data"].items():
-                self.overall_data["Overall Data"][f"Overall {key}"] += value
+            self.add_to_overall_data()
             self.reset_data()
 
-'''
+
 # Example usage
 ali = player.Player(
     starting_bal=1000, 
     starting_bet=50, 
     stop_win=2000, 
     stop_loss=0, 
-    bet_amount_strategy=utils.BetAmountStrats.martingale, 
+    bet_amount_strategy=utils.BetAmountStrats.flat_bet, 
     bet_placement_strategy=utils.LogicStrats.always_that, 
     bps_argument="Red"
 )
 
-players = [ali]
-rt = Roulette(utils.roulette_utils["european_wheel"], players)
-rt.roulette_simulator(100)
+veli = player.Player(
+    starting_bal=1000, 
+    starting_bet=50, 
+    stop_win=4000, 
+    stop_loss=0, 
+    bet_amount_strategy=utils.BetAmountStrats.martingale, 
+    bet_placement_strategy=utils.LogicStrats.always_that, 
+    bps_argument="Black"
+)
+
+players = [ali, veli]
+rt = Roulette(utils.roulette_utils["european_wheel"], players, 5)
+rt.roulette_simulator()
 print(rt.overall_data)
-'''
+print(rt.last_data())

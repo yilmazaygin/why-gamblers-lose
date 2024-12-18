@@ -1,5 +1,5 @@
 import random
-
+from player import Player
 payrates = { 
     # Payrates for each game
     "Roulette": {

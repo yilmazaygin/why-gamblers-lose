@@ -11,16 +11,17 @@ class Player:
         self.bet_placement_strategy = bet_placement_strategy
         self.bps_argument = bps_argument
 
+        self.player_overall_history =[]
+
         self.current_bal = starting_bal
         self.bet_history = []
         self.player_game_data = {
-            "ID": f"{self.bet_placement_strategy}.{self.starting_balance}.{self.starting_bet}",
-            "Starting Balance": self.starting_balance,
-            "Bet Amount Strategy": self.bet_amount_strategy,
-            "Bet Placement Strategy": self.bet_placement_strategy,
+            "ID": f"{self.starting_balance}-{self.starting_bet}-X // {self.stop_win}-{self.stop_loss}-X",
+            "ID2": f"{self.bet_amount_strategy.__name__}-{self.bet_placement_strategy.__name__}-{self.bps_argument}-X",
             "Ending Balance": 0,
             "Profit": 0,
-            "Rounds Played": 0
+            "Rounds Played": 0,
+            "Bet History": self.bet_history
         }
 
     def place_bet(self): # Returns True if bet is placed, False if not
@@ -43,13 +44,12 @@ class Player:
     def reset_player(self): # Resets player's balance, bet history and game data
         self.bet_history = []
         self.current_bal = self.starting_balance
+        self.player_overall_history.append(self.player_game_data)
         self.player_game_data = {
-            "ID": f"{self.bet_placement_strategy}.{self.starting_balance}.{self.starting_bet}",
-            "Starting Balance": self.starting_balance,
-            "Bet Amount Strategy": self.bet_amount_strategy,
-            "Bet Placement Strategy": self.bet_placement_strategy,
+            "ID": f"{self.starting_balance}-{self.starting_bet}-X // {self.stop_win}-{self.stop_loss}-X",
+            "ID2": f"{self.bet_amount_strategy.__name__}-{self.bet_placement_strategy.__name__}-{self.bps_argument}-X",
             "Ending Balance": 0,
             "Profit": 0,
-            "Rounds Played": 0
+            "Rounds Played": 0,
+            "Bet History": self.bet_history
         }
-
