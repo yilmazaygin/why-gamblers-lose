@@ -59,6 +59,7 @@ class Game: # Game Class, contains the game data and player data. We will inheri
                 self.betted_players.append(player)
                 self.data["Game Data"]["Wagered"] += player.bet_history[-1]['Bet Amount']
                 player.player_game_data["Rounds Played"] += 1
+                player.player_game_data["Wager"] += player.bet_history[-1]['Bet Amount']
             else:
                 self.active_players.remove(player)
 

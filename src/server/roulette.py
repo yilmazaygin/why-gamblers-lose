@@ -87,6 +87,6 @@ ali_veli = Player(
 )
 
 players = [ali, ali_veli]
-rt = Roulette(utils.roulette_utils["european_wheel"], players, 100000)
+rt = Roulette(utils.roulette_utils["european_wheel"], players, 10)
 rt.roulette_simulator()
 print(rt.overall_data)

@@ -22,6 +22,7 @@ class Player:
             "Profit": 0,
             "Rounds Played": 0,
             "Bet History": self.bet_history,
+            "Wager": 0,
         }
 
     def place_bet(self): # Returns True if bet is placed, False if not
