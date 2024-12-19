@@ -255,8 +255,9 @@ def get_bet_amount_strat(strategy: str, instance: BetAmountStrats) -> int:
     """
     return bas_dict[strategy](instance)
 
-# Example usage
+'''# Example usage
 bas = BetAmountStrats(1000, 10, [])
 print(get_bet_amount_strat("martingale", bas))
 print(get_bet_amount_strat("reverse_martingale", bas))
 print(get_bet_amount_strat("fibonacci", bas))
+'''

@@ -20,7 +20,7 @@ class Roulette(Game):
         super().__init__(players, "Roulette", sim_times) # Inherit from Game class, set the game type to Roulette
         self.wheel = wheel 
 
-    def check_wheel(self)
+    def check_wheel(self):
         """
         Checks if the wheel is valid, if not sets the wheel to European Wheel.
         """
