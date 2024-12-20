@@ -1,15 +1,13 @@
 class Game:
-    def __init__(self, game_type: str, players: list, sim_times: int):
+    def __init__(self, players: list, sim_times: int):
         """
         Initializes the Game class with the game type, players, and simulation times.
 
         Args:
-            game_type (str): Type of the game.
             players (list): List of player objects.
             sim_times (int): Number of times the game will be simulated.
         """
-        
-        self.game_type = game_type
+    
         self.players = players
         self.sim_times = sim_times
 
@@ -30,13 +28,21 @@ class Game:
             else:
                 self.active_players.remove(player)
 
-    def evaluate_bets(self, result): # result is the result of the game, format is game specific?
+    def evaluate_bets(self, result: list): # result is the result of the game, format is game specific?
         """
         Evaluates the bets of betted_players, pays accordingly.
         """
         for player in self.betted_players:
-            pass
-
+            player_last_bet = player.simulations_bet_history[-1]
+            if player_last_bet["Bet Place"] in result.values():
+                player.current_balance += player_last_bet["Bet Amount"] * 2
+                player_last_bet["Bet Condition"] = True
+                player_last_bet["Balance After Bet"] = player.current_balance
+            else:
+                player_last_bet["Bet Condition"] = False  
+                player_last_bet["Balance After Bet"] = player.current_balance      
+            player_last_bet["Bet Outcome"] = result
+    
     def reset_game(self):
         """
         Resets the game for the next simulation.
@@ -50,11 +56,13 @@ class Game:
     def calc_data(self):
         """
         Calculate the data of the game.
-        # Note that each player has player.overall_data, In this function we will combine them and return a single dictionary.
-        
-        Returns:
-            Dict: A dictionary containing the data of the game.
+        Note that each player has player.overall_data, In this function we will combine them and return a single dictionary.
+        It's not fully functional, you need to implement the logic for combining the data.
+        It just calcs all players' additional data.
         """
-        pass
+        for player in self.players:
+            player.overall_data["Simulation Times"] = self.sim_times
+            player.calc_additional_overall_data()
+        
 
     

@@ -7,17 +7,16 @@ AMERICAN_WHEEL = (0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36,
 TRIPLEZERO_WHEEL = (38, 0, 37, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26)
 
 class Roulette(Game):
-    def __init__(self, players: list, game_type:str, sim_times: int, wheel: tuple):
+    def __init__(self, players: list, sim_times: int, wheel: tuple):
         """
         Initializes the Roulette class with the players, game type, simulation times, and the wheel.
 
         Args:
             players (list): List of player objects.
-            game_type (str): Type of the game.
             sim_times (int): Number of times the game will be simulated.
             wheel (tuple): Tuple of the wheel numbers
         """
-        super().__init__(players, "Roulette", sim_times) # Inherit from Game class, set the game type to Roulette
+        super().__init__(players, sim_times) # Inherit from Game class, set the game type to Roulette
         self.wheel = wheel 
 
     def check_wheel(self):
@@ -56,7 +55,7 @@ class Roulette(Game):
         Returns:
             dict: The properties of the spun number.
 
-        # Note that 37 is 00 and 38 is 000
+        Note that 37 is 00 and 38 is 000
         """
         # Properties of the spun number are stored in a dictionary, we will return this dictionary after setting the properties
         properties = {
@@ -100,8 +99,9 @@ class Roulette(Game):
         """
         Simulates the roulette game, will run sim_times times.
 
-        # Each player will reset themself after each simulation.
-        # The game will reset itself after each simulation.
+        Each player will reset themself after each simulation.
+        The game will reset itself after each simulation.
+
         """
         self.check_wheel()
         self.check_sim_times()
@@ -113,7 +113,8 @@ class Roulette(Game):
                     break
                 spun_number = self.spin_wheel()
                 spun_number_properties = self.num_properties(spun_number)
+
                 self.evaluate_bets(spun_number_properties) # Evaluate the bets according to the spun number properties
             self.reset_game()
-           
-           
+
+        self.calc_data() # Calculate the data of the game

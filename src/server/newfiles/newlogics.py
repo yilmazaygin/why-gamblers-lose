@@ -38,9 +38,9 @@ class RouletteLogics:
         return random.choice(RTCOLORS)
 
 roulette_logic_dict = {
-    "always_red": RouletteLogics("Red", []),
-    "always_black": RouletteLogics("Black", []),
-    "always_green": RouletteLogics("Green", []),
+    "last_winner": RouletteLogics(None, []),
+    "reverse_last_color": RouletteLogics(None, []),
+    "last_color_again": RouletteLogics(None, []),
     "random_color": RouletteLogics(RTCOLORS, []),
 }
 

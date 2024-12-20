@@ -1,4 +1,6 @@
 from newbetamountstrats import BetAmountStrats, get_bet_amount_strat
+from newlogics import RouletteLogics
+from newlogics import roulette_logic_dict
 
 class Player:
     def __init__(self, starting_balance: int, starting_bet: int, stop_win: int, stop_loss: int, bas, bps, bps_arg):
@@ -38,7 +40,7 @@ class Player:
             "Wagered": 0,
             "Balance After Simulation": 0,
             "Profit": 0,
-            "Highest Balance Seen": 0,
+            "Highest Balance Seen": self.starting_balance,
             "Lowest Balance Seen": 0,
             "Highest Bet": 0,
             "Longest Win Streak": 0,
@@ -64,7 +66,7 @@ class Player:
             "Overall Longest Loss Streak": 0,
             "Overall Loss Rate": 0,
             "Average Simulation Lenght": 0,
-            "Avergave Ending Balance": 0,
+            "Average Ending Balance": 0,
         }
 
     def place_bet(self):
@@ -90,11 +92,12 @@ class Player:
         if next_bet_amount > self.current_balance or next_bet_amount == 0:
             return False
 
-        # Determine the bet placement using the bet placement strategy
+        '''# Determine the bet placement using the bet placement strategy
         if self.bps_argument is None:
             next_bet_placement = self.bps()
         else:
-            next_bet_placement = self.bps(self.bps_argument)
+            next_bet_placement = self.bps(self.bps_argument)'''
+        next_bet_placement = "Red"
 
         # Create a bet dictionary to store bet details
         bet = {
@@ -105,6 +108,8 @@ class Player:
             "Balance Before Bet": self.current_balance,
             "Balance After Bet": 0,  # Will be updated with profit/loss, RETURNS 0 ALL THE TIME FOR NOW
         }
+
+        self.simulation_data["Rounds Played"] += 1
 
         # Append the bet to the current simulation's bet history
         self.simulations_bet_history.append(bet)
@@ -120,7 +125,7 @@ class Player:
         """
         # Append the current simulation's bet history to overall bet history
         self.overall_bet_history.append(self.simulations_bet_history)
-
+        self.calc_player_round_data()
         # Update overall statistics with current simulation data
         self.overall_data["Overall Rounds Played"] += self.simulation_data["Rounds Played"]
         self.overall_data["Overall Rounds Won"] += self.simulation_data["Rounds Won"]
@@ -184,6 +189,30 @@ class Player:
         # Reset the player's balance for the next simulation
         self.current_balance = self.starting_balance
 
+    def calc_player_round_data(self):
+        """
+        This method calculates the round data for the player.
+        """
+        for bet in self.simulations_bet_history:
+            # Update the wagered amount
+            self.simulation_data["Wagered"] += bet["Bet Amount"]
+
+            # Update the balance after bet
+            bet["Balance After Bet"] = self.current_balance
+
+            # Update the balance after the bet outcome
+            if bet["Bet Condition"] == True:
+                self.simulation_data["Rounds Won"] += 1
+            else:
+                self.simulation_data["Rounds Lost"] += 1
+
+            # Update the highest balance seen
+            self.simulation_data["Highest Balance Seen"] = max(self.simulation_data["Highest Balance Seen"], bet["Balance After Bet"])
+            self.simulation_data["Lowest Balance Seen"] = min(self.simulation_data["Lowest Balance Seen"], bet["Balance After Bet"])
+            self.simulation_data["Highest Bet"] = max(self.simulation_data["Highest Bet"], bet["Bet Amount"])
+    
+        self.simulation_data["Profit"] = self.current_balance - self.starting_balance
+
     def calc_additional_overall_data(self):
         """
         Calculates additional statistics such as loss rate for overall data.
@@ -193,11 +222,11 @@ class Player:
 
         # Calculate the overall loss rate
         if total_rounds > 0:
-            self.overall_data["Overall Loss Rate"] = total_losses / total_rounds
+            self.overall_data["Overall Loss Rate"] = round((total_losses / total_rounds) * 100, 2)
         else:
             self.overall_data["Overall Loss Rate"] = 0
 
         # Calculate the average simulation length    
-        self.overall_bet_history["Average Simulation Lenght"] = self.overall_data["Overall Rounds Played"] / self.overall_data["Simulation Times"]
-        self.overall_bet_history["Avergave Ending Balance"] = (self.overall_data["Overall Deposit"] + self.overall_data["Overall Profit"]) / self.overall_data["Simulation Times"]
+        self.overall_data["Average Simulation Lenght"] = self.overall_data["Overall Rounds Played"] / self.overall_data["Simulation Times"]
+        self.overall_data["Average Ending Balance"] = (self.overall_data["Overall Deposit"] + self.overall_data["Overall Profit"]) / self.overall_data["Simulation Times"]
 
