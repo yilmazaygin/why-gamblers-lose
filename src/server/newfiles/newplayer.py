@@ -191,8 +191,12 @@ class Player:
 
     def calc_player_round_data(self):
         """
-        This method calculates the round data for the player.
+        This method calculates the round data for the player, 
+        including win and loss streaks.
         """
+        current_win_streak = 0
+        current_loss_streak = 0
+
         for bet in self.simulations_bet_history:
             # Update the wagered amount
             self.simulation_data["Wagered"] += bet["Bet Amount"]
@@ -203,15 +207,37 @@ class Player:
             # Update the balance after the bet outcome
             if bet["Bet Condition"] == True:
                 self.simulation_data["Rounds Won"] += 1
+                current_win_streak += 1
+                current_loss_streak = 0  # Reset loss streak
             else:
                 self.simulation_data["Rounds Lost"] += 1
+                current_loss_streak += 1
+                current_win_streak = 0  # Reset win streak
 
-            # Update the highest balance seen
-            self.simulation_data["Highest Balance Seen"] = max(self.simulation_data["Highest Balance Seen"], bet["Balance After Bet"])
-            self.simulation_data["Lowest Balance Seen"] = min(self.simulation_data["Lowest Balance Seen"], bet["Balance After Bet"])
-            self.simulation_data["Highest Bet"] = max(self.simulation_data["Highest Bet"], bet["Bet Amount"])
-    
+            # Update the highest and lowest balance seen
+            self.simulation_data["Highest Balance Seen"] = max(
+                self.simulation_data["Highest Balance Seen"], bet["Balance After Bet"]
+            )
+            self.simulation_data["Lowest Balance Seen"] = min(
+                self.simulation_data["Lowest Balance Seen"], bet["Balance After Bet"]
+            )
+
+            # Update the highest bet
+            self.simulation_data["Highest Bet"] = max(
+                self.simulation_data["Highest Bet"], bet["Bet Amount"]
+            )
+
+            # Update the longest win and loss streaks
+            self.simulation_data["Longest Win Streak"] = max(
+                self.simulation_data["Longest Win Streak"], current_win_streak
+            )
+            self.simulation_data["Longest Loss Streak"] = max(
+                self.simulation_data["Longest Loss Streak"], current_loss_streak
+            )
+
+        # Calculate profit for the simulation
         self.simulation_data["Profit"] = self.current_balance - self.starting_balance
+
 
     def calc_additional_overall_data(self):
         """
