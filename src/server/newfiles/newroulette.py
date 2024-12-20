@@ -7,7 +7,7 @@ AMERICAN_WHEEL = (0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36,
 TRIPLEZERO_WHEEL = (38, 0, 37, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26)
 
 class Roulette(Game):
-    def __init__(self, players: list, sim_times: int, wheel: tuple):
+    def __init__(self, players: list, sim_times: int, wheel: str):
         """
         Initializes the Roulette class with the players, game type, simulation times, and the wheel.
 
@@ -24,10 +24,12 @@ class Roulette(Game):
         Checks if the wheel is valid, if not sets the wheel to European Wheel.
         """
         # If the wheel is not one of the predefined wheels, set the wheel to European Wheel
-        if self.wheel not in (EUROPEAN_WHEEL, AMERICAN_WHEEL, TRIPLEZERO_WHEEL):
+        if self.wheel not in ("EUROPEAN_WHEEL", "AMERICAN_WHEEL", "TRIPLEZERO_WHEEL"):
             self.wheel = EUROPEAN_WHEEL
             print("Invalid wheel, setting the wheel to European Wheel.")
-
+        else:
+            self.wheel = globals()[self.wheel] # Get the wheel from the globals
+        print(self.wheel)
     def check_sim_times(self):
         """
         Checks if the simulation times are valid, if not sets the simulation times to 1.

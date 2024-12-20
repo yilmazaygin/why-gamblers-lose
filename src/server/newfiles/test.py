@@ -7,7 +7,7 @@ ali = Player(500, 10, 1000, 0, "martingale", roulette_logic_dict["random_color"]
 veli = Player(500, 15, 1500, 0, "martingale", roulette_logic_dict["last_color_again"], None )
 
 players = [ali, veli]
-rt = Roulette(players, 100, "asdasd")
+rt = Roulette(players, 100, "AMERICAN_WHEEL")
 rt.roulette_simulator()
 
 for key, value in ali.overall_data.items():
