@@ -9,8 +9,5 @@ players = [ali, veli]
 rt = Roulette(players, 100, "AMERICAN_WHEEL")
 rt.roulette_simulator()
 
-for key, value in ali.overall_data.items():
-    print(f"{key}: {value}")
-print("\n")
-for key, value in veli.overall_data.items():
-    print(f"{key}: {value}")
+ali.ov_data_printer()
+veli.ov_data_printer()

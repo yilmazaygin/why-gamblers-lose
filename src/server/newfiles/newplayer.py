@@ -256,3 +256,8 @@ class Player:
         self.overall_data["Average Simulation Lenght"] = self.overall_data["Overall Rounds Played"] / self.overall_data["Simulation Times"]
         self.overall_data["Average Ending Balance"] = (self.overall_data["Overall Deposit"] + self.overall_data["Overall Profit"]) / self.overall_data["Simulation Times"]
 
+    def ov_data_printer(self):
+        print("-------------------")
+        for key, value in self.overall_data.items():
+            print(f"{key}: {value}")
+        print("-------------------")
