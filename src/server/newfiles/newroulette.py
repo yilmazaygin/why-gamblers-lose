@@ -39,7 +39,6 @@ class Roulette(Game):
             self.sim_times = 1
             print("Invalid simulation times, setting the simulation times to 1.")
 
-    
     def spin_wheel(self):
         """
         Returns a random number from the wheel.
