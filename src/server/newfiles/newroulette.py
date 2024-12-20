@@ -29,7 +29,7 @@ class Roulette(Game):
             print("Invalid wheel, setting the wheel to European Wheel.")
         else:
             self.wheel = globals()[self.wheel] # Get the wheel from the globals
-        print(self.wheel)
+
     def check_sim_times(self):
         """
         Checks if the simulation times are valid, if not sets the simulation times to 1.
