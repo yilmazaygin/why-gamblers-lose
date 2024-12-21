@@ -108,6 +108,8 @@ class Roulette(Game):
 
         for _ in range(self.sim_times): # Loop through the number of simulations
             while self.active_players: # While there are active players
+                sim_no = (_ + 1)
+                self.add_sim_no(sim_no)
                 self.get_bets()
                 if not self.active_players: # If there are no active players, break the loop
                     break
@@ -117,5 +119,5 @@ class Roulette(Game):
                 self.evaluate_bets(spun_number_properties, ROULETTE_PAYRATES) # Evaluate the bets according to the spun number properties
             self.reset_game()
 
-        self.calc_data() # Calculate the data of the game
+        self.datamaster()
         

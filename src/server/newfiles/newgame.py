@@ -54,13 +54,11 @@ class Game:
         for player in self.players: 
             player.reset_player()
 
-    def calc_data(self):
+    def calc_player_additional_ov_data(self):
         """
-        Calculate the data of the game.
-        Note that each player has player.overall_data, In this function we will combine them and return a single dictionary.
-        It's not fully functional, you need to implement the logic for combining the data.
-        It just calcs all players' additional data.
+        Calculates every players additional data
         """
+
         for player in self.players:
             player.overall_data["Simulation Times"] = self.sim_times
             player.calc_additional_overall_data()
@@ -74,3 +72,112 @@ class Game:
             self.sim_times = 1
             print("Invalid simulation times, setting the simulation times to 1.")
     
+    def add_sim_no(self, sim_no: int):
+        """
+        Add simulation no to every player.
+        """
+        for player in self.players:
+            player.simulation_data["Simulation No"] = sim_no
+
+    def player_data_merger(self):
+        """
+        Merges the player data to the master data.
+        """
+        super_overall_data = {
+            "Simulation Times": self.sim_times,
+            "Players": len(self.players),
+            "Total Simulated Players Count": self.sim_times * len(self.players),
+            "Total Rounds Played": 0,
+            "Total Rounds Won": 0,
+            "Total Rounds Lost": 0,
+            "Total Deposit": 0,
+            "Total Wager": 0,
+            "Total Profit": 0,
+            "Total Simulation Ended In Profit": 0,
+            "Total Simulation Ended In Loss": 0,
+            "Total Highest Balance": 0,
+            "Total Lowest Balance": 0,
+            "Total Highest Bet": 0,
+            "Total Longest Win Streak": 0,
+            "Total Longest Loss Streak": 0,
+            "Total Loss Rate": 0,
+        }
+
+        for player in self.players:
+                data = player.overall_data
+                super_overall_data["Total Rounds Played"] += data["Overall Rounds Played"]
+                super_overall_data["Total Rounds Won"] += data["Overall Rounds Won"]
+                super_overall_data["Total Rounds Lost"] += data["Overall Rounds Lost"]
+                super_overall_data["Total Deposit"] += data["Overall Deposit"]
+                super_overall_data["Total Wager"] += data["Overall Wagered"]
+                super_overall_data["Total Profit"] += data["Overall Profit"]
+                super_overall_data["Total Simulation Ended In Profit"] += data["Simulations Ended In Profit"]
+                super_overall_data["Total Simulation Ended In Loss"] += data["Simulations Ended In Loss"]
+                super_overall_data["Total Highest Balance"] = max(data["Overall Highest Balance"], super_overall_data["Total Highest Balance"])
+                super_overall_data["Total Lowest Balance"] = super_overall_data["Total Highest Balance"]
+                super_overall_data["Total Lowest Balance"] = min(data["Overall Lowest Balance"], super_overall_data["Total Lowest Balance"])
+                super_overall_data["Total Highest Bet"] = max(data["Overall Highest Bet"], super_overall_data["Total Highest Bet"])
+                super_overall_data["Total Longest Win Streak"] = max(data["Overall Longest Win Streak"], super_overall_data["Total Longest Win Streak"])
+                super_overall_data["Total Longest Loss Streak"] = max(data["Overall Longest Loss Streak"], super_overall_data["Total Longest Loss Streak"])
+                super_overall_data["Total Loss Rate"] += data["Overall Loss Rate"]
+        super_overall_data["Total Loss Rate"] = round((super_overall_data["Total Loss Rate"] / len(self.players)), 2)
+        return super_overall_data
+    
+    def datamaster(self) -> tuple:
+        """
+        Returns the player based data and the merged data.
+
+        Returns:    
+            player_based_data (dict): Player based data.
+            merged_data (dict): Merged and calculated data.
+        """
+        player_based_data = {
+        "Played Most Rounds // Player": None,
+        "Played Most Rounds // Amount": 0,
+        
+        "Biggest Wager // Player": None,
+        "Biggest Wager // Amount": 0,
+
+        "Highest Ending Balance // Player": None,
+        "Highest Ending Balance // Amount": 0,
+
+        "Biggest Bet // Player": None,
+        "Biggest Bet // Amount": 0,
+
+        "Longest Winning Streak // Player": None,
+        "Longest Winning Streak // Amount": 0,
+
+        "Longest Losing Streak // Player": None,
+        "Longest Losing Streak // Amount": 0,
+    }
+
+        self.calc_player_additional_ov_data() # Calculate the additional overall data for every player.
+        merged_data = self.player_data_merger() # Merge the player data to the master data.
+
+        for player in self.players:
+            for data in player.simulation_data_history:
+                if data["Rounds Played"] > player_based_data["Played Most Rounds // Amount"]:
+                    player_based_data["Played Most Rounds // Player"] = f"{player.player_id}-Sim:{data['Simulation No']}"
+                    player_based_data["Played Most Rounds // Amount"] = data["Rounds Played"]
+
+                if data["Wagered"] > player_based_data["Biggest Wager // Amount"]:
+                    player_based_data["Biggest Wager // Player"] = f"{player.player_id}-Sim:{data['Simulation No']}"
+                    player_based_data["Biggest Wager // Amount"] = data["Wagered"]
+
+                if data["Balance After Simulation"] > player_based_data["Highest Ending Balance // Amount"]:
+                    player_based_data["Highest Ending Balance // Player"] = f"{player.player_id}-Sim:{data['Simulation No']}"
+                    player_based_data["Highest Ending Balance // Amount"] = data["Balance After Simulation"]
+
+                if data["Highest Bet"] > player_based_data["Biggest Bet // Amount"]:
+                    player_based_data["Biggest Bet // Player"] = f"{player.player_id}-Sim:{data['Simulation No']}"
+                    player_based_data["Biggest Bet // Amount"] = data["Highest Bet"]
+
+                if data["Longest Win Streak"] > player_based_data["Longest Winning Streak // Amount"]:
+                    player_based_data["Longest Winning Streak // Player"] = f"{player.player_id}-Sim:{data['Simulation No']}"
+                    player_based_data["Longest Winning Streak // Amount"] = data["Longest Win Streak"]
+
+                if data["Longest Loss Streak"] > player_based_data["Longest Losing Streak // Amount"]:
+                    player_based_data["Longest Losing Streak // Player"] = f"{player.player_id}-Sim:{data['Simulation No']}"
+                    player_based_data["Longest Losing Streak // Amount"] = data["Longest Loss Streak"]
+
+        return player_based_data, merged_data

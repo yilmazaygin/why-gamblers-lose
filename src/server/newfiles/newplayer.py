@@ -3,7 +3,7 @@ from newlogics import RouletteLogics
 from newlogics import roulette_logic_dict
 
 class Player:
-    def __init__(self, starting_balance: int, starting_bet: int, stop_win: int, stop_loss: int, bas, bps, bps_arg):
+    def __init__(self, player_id, starting_balance: int, starting_bet: int, stop_win: int, stop_loss: int, bas, bps, bps_arg):
         """
         Initializes the Player class with strategies, balance, and limits.
 
@@ -16,6 +16,7 @@ class Player:
             bps (callable): Bet placement strategy function.
             bps_arg (any): Optional argument for the bet placement strategy.
         """
+        self.player_id = player_id
         self.starting_balance = starting_balance
         self.starting_bet = starting_bet
         self.stop_win = stop_win
