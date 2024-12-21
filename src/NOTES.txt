@@ -8,3 +8,5 @@ ADD RULES AND RULE APPENDING LOGİC LATER
         etc.
 
 ADD WHEEL TO RULES AT ROULETTE
+
+and I deleted placeholder...
