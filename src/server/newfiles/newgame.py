@@ -72,14 +72,14 @@ class Game:
             self.sim_times = 1
             print("Invalid simulation times, setting the simulation times to 1.")
     
-    def add_sim_no(self, sim_no: int):
+    def add_sim_no(self, sim_no: int) -> None:
         """
         Add simulation no to every player.
         """
         for player in self.players:
             player.simulation_data["Simulation No"] = sim_no
 
-    def player_data_merger(self):
+    def player_data_merger(self) -> dict:
         """
         Merges the player data to the master data.
         """
@@ -123,13 +123,13 @@ class Game:
         super_overall_data["Total Loss Rate"] = round((super_overall_data["Total Loss Rate"] / len(self.players)), 2)
         return super_overall_data
     
-    def datamaster(self) -> tuple:
+    
+    def most_data_calc(self) -> dict:
         """
-        Returns the player based data and the merged data.
+        Calculates the most data for the players.
 
-        Returns:    
-            player_based_data (dict): Player based data.
-            merged_data (dict): Merged and calculated data.
+        Returns:
+            player_based_data (dict): The player based data
         """
         player_based_data = {
         "Played Most Rounds // Player": None,
@@ -152,7 +152,6 @@ class Game:
     }
 
         self.calc_player_additional_ov_data() # Calculate the additional overall data for every player.
-        merged_data = self.player_data_merger() # Merge the player data to the master data.
 
         for player in self.players:
             for data in player.simulation_data_history:
@@ -180,4 +179,16 @@ class Game:
                     player_based_data["Longest Losing Streak // Player"] = f"{player.player_id}-Sim:{data['Simulation No']}"
                     player_based_data["Longest Losing Streak // Amount"] = data["Longest Loss Streak"]
 
+        return player_based_data
+    
+    def datamaster(self) -> tuple:
+        """"
+        Calls the necessary methods to calculate the data.
+
+        Returns:
+            player_based_data (dict): The player based data.
+            merged_data (dict): The merged data.
+        """
+        player_based_data = self.most_data_calc()
+        merged_data = self.player_data_merger() # Merge the player data to the master data.
         return player_based_data, merged_data
