@@ -131,6 +131,8 @@ class Baccarat(Game):
         self.append_rules(self.rules)
         
         for _ in range(self.sim_times):
+            sim_no = (_ + 1)
+            self.add_sim_no(sim_no)
             self.shoe = newutils.create_shoe(self.deck_amount)
             self.shoe = newutils.shuffle_shoe(self.shoe)
 
