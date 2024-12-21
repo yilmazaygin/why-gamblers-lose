@@ -1,0 +1,7 @@
+THERES A VERY BIG ISSUE ABOUT BPS AND BPSARG!!!!!
+
+ADD RULES AND RULE APPENDING LOGİC LATER
+    min/max bet
+    max/min_shoe_size for baccarat
+    min_cards_to_play for baccarat 
+        etc.
