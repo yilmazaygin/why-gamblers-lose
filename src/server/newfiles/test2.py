@@ -12,6 +12,5 @@ players = [ali, veli]
 
 bc = Baccarat(players, 5000, default_rules, 4)
 bc.baccarat_simulator()
-ali.ov_data_printer()
 
-print(bc.datamaster())
+print(bc.datamaster_data)

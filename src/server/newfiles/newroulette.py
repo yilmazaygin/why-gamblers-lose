@@ -105,6 +105,7 @@ class Roulette(Game):
         self.check_wheel()
         self.check_sim_times()
         self.append_rules(self.rules)
+        
         for _ in range(self.sim_times): # Loop through the number of simulations
             while self.active_players: # While there are active players
                 sim_no = (_ + 1)

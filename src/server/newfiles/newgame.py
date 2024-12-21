@@ -17,6 +17,8 @@ class Game:
         self.betted_players = []
         self.rules = rules
 
+        self.datamaster_data = None
+
     def get_bets(self) -> None:
         """
         Checks if a player can bet and adds them to the betted_players list, if not removes them from the active_players list.
@@ -79,6 +81,17 @@ class Game:
         """
         for player in self.players:
             player.simulation_data["Simulation No"] = sim_no
+
+    
+    def append_rules(self, rules: dict) -> None:
+        """
+        Appends the rules to the game.
+
+        Args:
+            rules (dict): The rules to be appended.
+        """
+        for player in self.players:
+            player.rules = rules
 
     def player_data_merger(self) -> dict:
         """
@@ -192,14 +205,5 @@ class Game:
         """
         player_based_data = self.most_data_calc()
         merged_data = self.player_data_merger() # Merge the player data to the master data.
-        return player_based_data, merged_data
-
-    def append_rules(self, rules: dict) -> None:
-        """
-        Appends the rules to the game.
-
-        Args:
-            rules (dict): The rules to be appended.
-        """
-        for player in self.players:
-            player.rules = rules
+        
+        self.datamaster_data = (player_based_data, merged_data)
