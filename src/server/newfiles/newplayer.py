@@ -3,11 +3,12 @@ from newlogics import RouletteLogics
 from newlogics import roulette_logic_dict
 
 class Player:
-    def __init__(self, player_id, starting_balance: int, starting_bet: int, stop_win: int, stop_loss: int, bas, bps, bps_arg):
+    def __init__(self, player_id: str, starting_balance: int, starting_bet: int, stop_win: int, stop_loss: int, bas, bps, bps_arg):
         """
         Initializes the Player class with strategies, balance, and limits.
 
         Args:
+            player_id (str): Unique identifier for the player.
             starting_balance (int): Initial balance of the player.
             starting_bet (int): Initial bet amount.
             stop_win (int): Balance at which the player stops after winning.
@@ -70,7 +71,7 @@ class Player:
             "Average Ending Balance": 0,
         }
 
-    def place_bet(self):
+    def place_bet(self) -> bool:
         """
         Places a bet using the configured strategies and updates the player's balance.
         
@@ -120,7 +121,7 @@ class Player:
 
         return True
 
-    def reset_player(self):
+    def reset_player(self) -> None:
         """
         Resets the player state at the end of a simulation and updates overall data.
         """
@@ -190,10 +191,9 @@ class Player:
         # Reset the player's balance for the next simulation
         self.current_balance = self.starting_balance
 
-    def calc_player_round_data(self):
+    def calc_player_round_data(self) -> None:
         """
-        This method calculates the round data for the player, 
-        including win and loss streaks.
+        This method calculates the round data for the player, including win and loss streaks.
         """
         current_win_streak = 0
         current_loss_streak = 0
@@ -237,7 +237,7 @@ class Player:
         self.simulation_data["Profit"] = self.current_balance - self.starting_balance
 
 
-    def calc_additional_overall_data(self):
+    def calc_additional_overall_data(self) -> None:
         """
         Calculates additional statistics such as loss rate for overall data.
         """
@@ -254,7 +254,7 @@ class Player:
         self.overall_data["Average Simulation Lenght"] = round((self.overall_data["Overall Rounds Played"] / self.overall_data["Simulation Times"]), 1)
         self.overall_data["Average Ending Balance"] = round(((self.overall_data["Overall Deposit"] + self.overall_data["Overall Profit"]) / self.overall_data["Simulation Times"]), 2)
 
-    def ov_data_printer(self):
+    def ov_data_printer(self) -> None:
         """
         Prints the overall data dict of the player line by line.
         """

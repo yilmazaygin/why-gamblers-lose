@@ -1,7 +1,6 @@
 from newgame import Game
 import random
 
-# Roulette Wheels
 EUROPEAN_WHEEL = (0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26)
 AMERICAN_WHEEL = (0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 37, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2)
 TRIPLEZERO_WHEEL = (38, 0, 37, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26)
@@ -17,7 +16,7 @@ ROULETTE_PAYRATES = {
 class Roulette(Game):
     def __init__(self, players: list, sim_times: int, rules: dict, wheel: str,):
         """
-        Initializes the Roulette class with the players, game type, simulation times, and the wheel.
+        Initializes the Roulette class with the players, simulation times, rules, and wheel.
 
         Args:
             players (list): List of player objects.
@@ -28,7 +27,7 @@ class Roulette(Game):
         super().__init__(players, sim_times, rules) # Inherit from Game class
         self.wheel = wheel 
 
-    def check_wheel(self):
+    def check_wheel(self) -> None:
         """
         Checks if the wheel is valid, if not sets the wheel to European Wheel.
         """
@@ -39,14 +38,14 @@ class Roulette(Game):
         else:
             self.wheel = globals()[self.wheel] # Get the wheel from the globals
 
-    def spin_wheel(self):
+    def spin_wheel(self) -> int:
         """
         Returns a random number from the wheel.
         """
         number = random.choice(self.wheel)
         return number
 
-    def num_properties(self, spun_number: int):
+    def num_properties(self, spun_number: int) -> dict:
         """
         Returns the properties of the spun number.
 
@@ -96,7 +95,7 @@ class Roulette(Game):
 
         return properties
 
-    def roulette_simulator(self):
+    def roulette_simulator(self) -> None:
         """
         Simulates the roulette game, will run sim_times times.
         Each player will reset themself after each simulation.

@@ -1,3 +1,5 @@
+# TEST FILE FOR ROULETTE SIMULATOR
+
 from newplayer import Player
 from newlogics import roulette_logic_dict
 from newroulette import Roulette

@@ -1,7 +1,10 @@
 THERES A VERY BIG ISSUE ABOUT BPS AND BPSARG!!!!!
+UPDATE LOGICS AND INHERIT FROM A MAİN LOGİC CLASS
 
 ADD RULES AND RULE APPENDING LOGİC LATER
     min/max bet
     max/min_shoe_size for baccarat
     min_cards_to_play for baccarat 
         etc.
+
+ADD WHEEL TO RULES AT ROULETTE

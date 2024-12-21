@@ -1,6 +1,6 @@
 import random
 
-def create_shoe(deck_amount: int):
+def create_shoe(deck_amount: int) -> list:
     """
     Creates a shoe with the given number of decks.
 
@@ -13,7 +13,7 @@ def create_shoe(deck_amount: int):
     shoe = shoe * deck_amount
     return shoe
 
-def shuffle_shoe(shoe: list):
+def shuffle_shoe(shoe: list) -> list:
     """
     Shuffles the created shoe.
 
@@ -27,7 +27,7 @@ def shuffle_shoe(shoe: list):
     return shoe
 
 
-def deal(shoe: list, card_receivers: list, times: int): # Deals the cards to the card_receivers, times times
+def deal(shoe: list, card_receivers: list, times: int) -> None:
     """
     Deals the cards to the card receivers one by one.
     Note that dealer is a receiver too.
@@ -41,7 +41,7 @@ def deal(shoe: list, card_receivers: list, times: int): # Deals the cards to the
         for receiver in card_receivers:
             receiver.append(shoe.pop())
 
-def reset_hands(hands: list, hand_values: list):
+def reset_hands(hands: list, hand_values: list) -> None:
     """
     Resets every hand in the game
 

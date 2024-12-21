@@ -1,3 +1,5 @@
+# TEST FILE FOR BACCARAT SIMULATOR
+
 from newplayer import Player
 from newlogics import BaccaratLogics
 from newbaccarat import Baccarat

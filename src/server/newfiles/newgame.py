@@ -16,7 +16,7 @@ class Game:
         # The betted players are the players who have placed a bet in the current round.
         self.betted_players = [] 
 
-    def get_bets(self):
+    def get_bets(self) -> None:
         """
         Checks if a player can bet and adds them to the betted_players list, if not removes them from the active_players list.
         """
@@ -28,7 +28,7 @@ class Game:
             else:
                 self.active_players.remove(player)
 
-    def evaluate_bets(self, result: dict, payrates: dict): # result is the result of the game, format is game specific?
+    def evaluate_bets(self, result: dict, payrates: dict) -> None: # result is the result of the game, format is game specific?
         """
         Evaluates the bets of betted_players, pays accordingly.
         Payrates changes according to the game type.
@@ -44,7 +44,7 @@ class Game:
                 player_last_bet["Balance After Bet"] = player.current_balance      
             player_last_bet["Bet Outcome"] = result
     
-    def reset_game(self):
+    def reset_game(self) -> None:
         """
         Resets the game for the next simulation.
         """
@@ -54,7 +54,7 @@ class Game:
         for player in self.players: 
             player.reset_player()
 
-    def calc_player_additional_ov_data(self):
+    def calc_player_additional_ov_data(self) -> None:
         """
         Calculates every players additional data
         """
@@ -63,7 +63,7 @@ class Game:
             player.overall_data["Simulation Times"] = self.sim_times
             player.calc_additional_overall_data()
         
-    def check_sim_times(self):
+    def check_sim_times(self) -> None:
         """
         Checks if the simulation times are valid, if not sets the simulation times to 1.
         """
