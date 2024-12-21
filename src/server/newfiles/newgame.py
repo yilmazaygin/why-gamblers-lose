@@ -14,7 +14,8 @@ class Game:
         # The active players are the players who are still playing the game for the current simulation.
         self.active_players = players.copy()
         # The betted players are the players who have placed a bet in the current round.
-        self.betted_players = [] 
+        self.betted_players = []
+        self.rules = rules
 
     def get_bets(self) -> None:
         """
@@ -192,3 +193,13 @@ class Game:
         player_based_data = self.most_data_calc()
         merged_data = self.player_data_merger() # Merge the player data to the master data.
         return player_based_data, merged_data
+
+    def append_rules(self, rules: dict) -> None:
+        """
+        Appends the rules to the game.
+
+        Args:
+            rules (dict): The rules to be appended.
+        """
+        for player in self.players:
+            player.rules = rules

@@ -128,7 +128,8 @@ class Baccarat(Game):
         """
         self.check_deck_amount()
         self.check_sim_times()
-
+        self.append_rules(self.rules)
+        
         for _ in range(self.sim_times):
             self.shoe = newutils.create_shoe(self.deck_amount)
             self.shoe = newutils.shuffle_shoe(self.shoe)
@@ -151,4 +152,4 @@ class Baccarat(Game):
                 newutils.reset_hands(self.hands, [0, 0])
 
             self.reset_game()
-        self.calc_data()
+        self.datamaster()

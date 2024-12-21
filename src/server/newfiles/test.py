@@ -4,7 +4,7 @@ from newplayer import Player
 from newlogics import roulette_logic_dict
 from newroulette import Roulette
 from newlogics import RouletteLogics
-rules = {}
+from newutils import default_rules
 
 rl= RouletteLogics("1st Dozen", [])
 
@@ -13,7 +13,7 @@ veli = Player("VELI", 500, 15, 750, 0, "reverse_martingale", rl, "1st Dozen" )
 cemil = Player("CEMIL", 500, 15, 750, 0, "flat_bet", rl, "1st Dozen" )
 
 players = [ali, veli, cemil]
-rt = Roulette(players, 20, rules, "AMERICAN_WHEEL")
+rt = Roulette(players, 20, default_rules, "AMERICAN_WHEEL")
 rt.roulette_simulator()
 
 ali.ov_data_printer()

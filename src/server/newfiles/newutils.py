@@ -1,5 +1,11 @@
 import random
 
+default_rules = {
+    "MIN_BET": 10,
+    "MAX_BET": 25000,
+}
+
+
 def create_shoe(deck_amount: int) -> list:
     """
     Creates a shoe with the given number of decks.

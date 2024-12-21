@@ -33,6 +33,8 @@ class Player:
         self.overall_bet_history = []
         self.simulation_data_history = [] # This is just for debbugging purposes, will delete later
 
+        self.rules = {}
+        
         # Data specific to the current simulation
         self.simulation_data = {
             "Simulation No": 0,
@@ -93,6 +95,10 @@ class Player:
         # Ensure the player has enough balance to place the bet
         if next_bet_amount > self.current_balance or next_bet_amount == 0:
             return False
+        
+        if next_bet_amount > self.rules["MAX_BET"] or next_bet_amount < self.rules["MIN_BET"]:
+            return False
+    
 
         '''# Determine the bet placement using the bet placement strategy
         if self.bps_argument is None:
