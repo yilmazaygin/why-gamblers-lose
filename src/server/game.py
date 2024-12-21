@@ -122,22 +122,6 @@ class Game: # Game Class, contains the game data and player data. We will inheri
             else:
                 self.data["Game Data"]["Hands Lost by Players"] += 1
                 player_bet["Bet Condition"] = False
-
-    def deal(self, deck: list, card_receivers: list, times: int): # Deals the cards to the card_receivers, times times
-        for _ in range(times):
-            for receiver in card_receivers:
-                receiver.append(deck.pop())
-
-    def deck_creator(self, deck_amount: int): # Deck Creator, returns the deck_amount times the deck
-        suits = ["Spades", "Hearts", "Clubs", "Diamonds"]
-        ranks = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"]
-        deck = [rank + " of " + suit for suit in suits for rank in ranks]
-        deck = deck * deck_amount
-        return deck
-
-    def shuffle_deck(self, deck: list): # Shuffles the Deck, returns the shuffled deck
-        random.shuffle(deck)
-        return deck
     
     def last_data(self):
         for key, value in self.data["Game Data"].items():

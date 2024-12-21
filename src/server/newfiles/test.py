@@ -1,13 +1,15 @@
 from newplayer import Player
 from newlogics import roulette_logic_dict
 from newroulette import Roulette
+from newlogics import RouletteLogics
+rules = {}
 
-ali = Player(500, 10, 1000, 0, "martingale", roulette_logic_dict["random_color"], None )
-veli = Player(500, 15, 1500, 0, "martingale", roulette_logic_dict["last_color_again"], None )
+rl= RouletteLogics("1st Dozen", [])
 
-players = [ali, veli]
-rt = Roulette(players, 100, "AMERICAN_WHEEL")
+ali = Player(500, 15, 750, 0, "martingale", rl, "1st Dozen" )
+
+players = [ali]
+rt = Roulette(players, 20000, rules, "AMERICAN_WHEEL")
 rt.roulette_simulator()
 
 ali.ov_data_printer()
-veli.ov_data_printer()

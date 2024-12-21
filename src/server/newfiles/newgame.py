@@ -1,5 +1,5 @@
 class Game:
-    def __init__(self, players: list, sim_times: int):
+    def __init__(self, players: list, sim_times: int, rules: dict):
         """
         Initializes the Game class with the game type, players, and simulation times.
 
@@ -28,14 +28,15 @@ class Game:
             else:
                 self.active_players.remove(player)
 
-    def evaluate_bets(self, result: list): # result is the result of the game, format is game specific?
+    def evaluate_bets(self, result: dict, payrates: dict): # result is the result of the game, format is game specific?
         """
         Evaluates the bets of betted_players, pays accordingly.
+        Payrates changes according to the game type.
         """
         for player in self.betted_players:
             player_last_bet = player.simulations_bet_history[-1]
             if player_last_bet["Bet Place"] in result.values():
-                player.current_balance += player_last_bet["Bet Amount"] * 2
+                player.current_balance += player_last_bet["Bet Amount"] * payrates[player_last_bet["Bet Place"]]
                 player_last_bet["Bet Condition"] = True
                 player_last_bet["Balance After Bet"] = player.current_balance
             else:
@@ -64,5 +65,12 @@ class Game:
             player.overall_data["Simulation Times"] = self.sim_times
             player.calc_additional_overall_data()
         
-
+    def check_sim_times(self):
+        """
+        Checks if the simulation times are valid, if not sets the simulation times to 1.
+        """
+        # If the simulation times are less than 1 or not an integer, set the simulation times to 1
+        if self.sim_times < 1 or not isinstance(self.sim_times, int):
+            self.sim_times = 1
+            print("Invalid simulation times, setting the simulation times to 1.")
     

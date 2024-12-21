@@ -41,7 +41,7 @@ class Player:
             "Balance After Simulation": 0,
             "Profit": 0,
             "Highest Balance Seen": self.starting_balance,
-            "Lowest Balance Seen": 0,
+            "Lowest Balance Seen": self.starting_balance,
             "Highest Bet": 0,
             "Longest Win Streak": 0,
             "Longest Loss Streak": 0,
@@ -60,7 +60,7 @@ class Player:
             "Simulations Ended In Profit": 0,
             "Simulations Ended In Loss": 0,
             "Overall Highest Balance": 0,
-            "Overall Lowest Balance": 0,
+            "Overall Lowest Balance": self.starting_balance,
             "Overall Highest Bet": 0,
             "Overall Longest Win Streak": 0,
             "Overall Longest Loss Streak": 0,
@@ -97,7 +97,7 @@ class Player:
             next_bet_placement = self.bps()
         else:
             next_bet_placement = self.bps(self.bps_argument)'''
-        next_bet_placement = "Red"
+        next_bet_placement = self.bps_argument
 
         # Create a bet dictionary to store bet details
         bet = {
@@ -166,8 +166,8 @@ class Player:
             self.simulation_data["Longest Loss Streak"]
         )
 
+        self.simulation_data["Balance After Simulation"] = self.current_balance
         self.simulation_data_history.append(self.simulation_data) # This is just for debbugging purposes, will delete later
-
         # Reset simulation-specific data for the next run
         self.simulations_bet_history = []
         self.simulation_data = {
@@ -178,8 +178,8 @@ class Player:
             "Wagered": 0,
             "Balance After Simulation": 0,
             "Profit": 0,
-            "Highest Balance Seen": 0,
-            "Lowest Balance Seen": 0,
+            "Highest Balance Seen": self.starting_balance,
+            "Lowest Balance Seen": self.starting_balance,
             "Highest Bet": 0,
             "Longest Win Streak": 0,
             "Longest Loss Streak": 0,
@@ -200,9 +200,6 @@ class Player:
         for bet in self.simulations_bet_history:
             # Update the wagered amount
             self.simulation_data["Wagered"] += bet["Bet Amount"]
-
-            # Update the balance after bet
-            bet["Balance After Bet"] = self.current_balance
 
             # Update the balance after the bet outcome
             if bet["Bet Condition"] == True:
@@ -253,10 +250,13 @@ class Player:
             self.overall_data["Overall Loss Rate"] = 0
 
         # Calculate the average simulation length    
-        self.overall_data["Average Simulation Lenght"] = self.overall_data["Overall Rounds Played"] / self.overall_data["Simulation Times"]
-        self.overall_data["Average Ending Balance"] = (self.overall_data["Overall Deposit"] + self.overall_data["Overall Profit"]) / self.overall_data["Simulation Times"]
+        self.overall_data["Average Simulation Lenght"] = round((self.overall_data["Overall Rounds Played"] / self.overall_data["Simulation Times"]), 1)
+        self.overall_data["Average Ending Balance"] = round(((self.overall_data["Overall Deposit"] + self.overall_data["Overall Profit"]) / self.overall_data["Simulation Times"]), 2)
 
     def ov_data_printer(self):
+        """
+        Prints the overall data dict of the player line by line.
+        """
         print("-------------------")
         for key, value in self.overall_data.items():
             print(f"{key}: {value}")

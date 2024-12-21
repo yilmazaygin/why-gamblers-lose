@@ -6,8 +6,16 @@ EUROPEAN_WHEEL = (0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8,
 AMERICAN_WHEEL = (0, 28, 9, 26, 30, 11, 7, 20, 32, 17, 5, 22, 34, 15, 3, 24, 36, 13, 1, 37, 27, 10, 25, 29, 12, 8, 19, 31, 18, 6, 21, 33, 16, 4, 23, 35, 14, 2)
 TRIPLEZERO_WHEEL = (38, 0, 37, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26)
 
+ROULETTE_PAYRATES = {
+    "Red": 2, "Black": 2,
+    "Odd": 2, "Even": 2,
+    "High": 2, "Low": 2,
+    "1st Column": 3, "2nd Column": 3, "3rd Column": 3,
+    "1st Dozen": 3, "2nd Dozen": 3, "3rd Dozen": 3,
+}
+
 class Roulette(Game):
-    def __init__(self, players: list, sim_times: int, wheel: str):
+    def __init__(self, players: list, sim_times: int, rules: dict, wheel: str,):
         """
         Initializes the Roulette class with the players, game type, simulation times, and the wheel.
 
@@ -15,8 +23,9 @@ class Roulette(Game):
             players (list): List of player objects.
             sim_times (int): Number of times the game will be simulated.
             wheel (tuple): Tuple of the wheel numbers
+            rules (dict): Dictionary of the rules of the game, such as min or max bet amount.
         """
-        super().__init__(players, sim_times) # Inherit from Game class, set the game type to Roulette
+        super().__init__(players, sim_times, rules) # Inherit from Game class
         self.wheel = wheel 
 
     def check_wheel(self):
@@ -29,15 +38,6 @@ class Roulette(Game):
             print("Invalid wheel, setting the wheel to European Wheel.")
         else:
             self.wheel = globals()[self.wheel] # Get the wheel from the globals
-
-    def check_sim_times(self):
-        """
-        Checks if the simulation times are valid, if not sets the simulation times to 1.
-        """
-        # If the simulation times are less than 1 or not an integer, set the simulation times to 1
-        if self.sim_times < 1 or type(self.sim_times) != int:
-            self.sim_times = 1
-            print("Invalid simulation times, setting the simulation times to 1.")
 
     def spin_wheel(self):
         """
@@ -99,7 +99,6 @@ class Roulette(Game):
     def roulette_simulator(self):
         """
         Simulates the roulette game, will run sim_times times.
-
         Each player will reset themself after each simulation.
         The game will reset itself after each simulation.
 
@@ -115,7 +114,8 @@ class Roulette(Game):
                 spun_number = self.spin_wheel()
                 spun_number_properties = self.num_properties(spun_number)
 
-                self.evaluate_bets(spun_number_properties) # Evaluate the bets according to the spun number properties
+                self.evaluate_bets(spun_number_properties, ROULETTE_PAYRATES) # Evaluate the bets according to the spun number properties
             self.reset_game()
 
         self.calc_data() # Calculate the data of the game
+        
