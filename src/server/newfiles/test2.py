@@ -3,7 +3,6 @@ from newlogics import BaccaratLogics
 from newbaccarat import Baccarat
 
 rules = {}
-
 ali = Player(500, 15, 750, 0, "martingale", BaccaratLogics.always_that, "Banker" )
 
 players = [ali]
