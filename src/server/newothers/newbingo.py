@@ -75,20 +75,18 @@ class Bingo:
 
     def check_card(self, card: list) -> bool:
         """
-        Check if the Bingo card is completed or not.
-
-        Args:
-            card (list): Bingo card to be checked
-
-        Returns:
-            bool: True if the Bingo card is completed, False otherwise
+        Optimized check if the Bingo card is completed or not.
         """
-        for i in range(5):
-            if all(card[i][j] == "X" for j in range(5)) or all(card[j][i] == "X" for j in range(5)):
+        for row in card:
+            if all(cell == "X" for cell in row):  # Horizontal check
                 return True
-        if all(card[i][i] == "X" for i in range(5)) or all(card[i][4 - i] == "X" for i in range(5)):
+        for col in zip(*card):
+            if all(cell == "X" for cell in col):  # Vertical check
+                return True
+        if all(card[i][i] == "X" for i in range(5)) or all(card[i][4 - i] == "X" for i in range(5)):  # Diagonal check
             return True
         return False
+
 
     def print_card(self, card: list) -> None:
         """
@@ -130,17 +128,7 @@ class Bingo:
         ran_player_amount = random.randint(self.player_amounts[range][0], self.player_amounts[range][1])
         return ran_player_amount
     
-    def simulate_single_round(self, cards: list) -> bool:
-        """
-        For modulizing simulate method, simulate a single round of Bingo game, implement later.
-        A round is completed when a player completes their card.
-
-        Returns:
-            bool: True if a round is completed, False otherwise
-        """
-        pass
-
-    def simulate(self, cards: list, sim_times: int) -> int:
+    def simulate_bingo(self, cards: list, sim_times: int) -> int:
         """
         Simulate the Bingo game with the given cards, sim_times times.
         """
@@ -177,4 +165,4 @@ class Bingo:
 # Test
 bg = Bingo()
 cardsasdas = bg.create_players(25)
-print(bg.simulate(cardsasdas, 50))
+print(bg.simulate_bingo(cardsasdas, 50))
