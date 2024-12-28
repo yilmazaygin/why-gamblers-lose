@@ -5,6 +5,8 @@ default_rules = {
     "MAX_BET": 25000,
 }
 
+'Jack', 'Queen', 'King'
+
 
 def create_shoe(deck_amount: int) -> list:
     """
