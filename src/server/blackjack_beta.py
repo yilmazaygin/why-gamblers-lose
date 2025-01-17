@@ -10,6 +10,8 @@ class BlackJack:
         self.shoe = create_shoe(1)
         self.shoe = shuffle_shoe(self.shoe)
 
+        self.count = 0
+
     def blackjack_hand_value(self, hand) -> tuple:
         """
         Calculates the value of a blackjack hand.
@@ -140,7 +142,37 @@ class BlackJack:
             return 'Double' if self.dealers_hand[0].split(' ')[0] in ['3', '4', '5'] else 'Hit'
         if value in [5, 6, 7, 8]:
             return 'Hit'
+        
+    def bust(self, hand: list) -> bool:
+        """
+        Checks if the hand is a bust.
 
+        Args:
+            hand (list): A list of strings representing the cards in the hand
+
+        Returns:
+            bool: True if the hand is a bust, False otherwise.
+        """
+        value = self.blackjack_hand_value(hand)
+        if type(value) == int and value > 21:
+            return False
+        return True
+    
+    def is_blackjack(self, hand: list) -> bool:
+        """
+        Checks if the hand is a blackjack.
+
+        Args:
+            hand (list): A list of strings representing the cards in the hand
+
+        Returns:
+            bool: True if the hand is a blackjack, False otherwise.
+        """
+        value = self.blackjack_hand_value(hand)
+        if type(value) == int and value == 21 and len(hand) == 2:
+            return True
+        return False
+    
     def basic_strategy(self, hand: list):
         """
         Basic strategy for blackjack.
@@ -150,6 +182,10 @@ class BlackJack:
         Returns:
             str: The recommended action based on the basic strategy. One of 'Hit', 'Stand', 'Double', 'Split'.
         """
+        if self.bust(hand):
+            return 'Bust'
+        if self.is_blackjack(hand):
+            return 'Blackjack'
         if len(hand) == 2 and hand[0].split(' ')[0] == hand[1].split(' ')[0]:
             return self.pairs(hand)
         for card in hand:
@@ -157,9 +193,41 @@ class BlackJack:
                 return self.ace_in_hand(hand)
         return self.other_situations(hand)
     
+    def dealer_play(self):
+        """
+        Function to simulate the dealer's play.
+        If dealer's hands first card is an ace, the function will return 'Is Insurance?'.
+        If dealer's hand value is 17 or more, the function will return 'Stand'.
+        If dealer's hand value is less than 17, the function will keep dealing cards until the value is 17 or more.
 
-# Testler
+        Returns:
+            str: The recommended action based on the basic strategy. One of 'Hit', 'Stand', 'Bust'.
+        
+        """
+        if self.dealers_hand[0].split(' ')[0] == 'Ace':
+            return ' Is Insurance?'
+        
+        if self.blackjack_hand_value(self.dealers_hand) >= 17:
+            return 'Stand'
+        
+        while self.blackjack_hand_value(self.dealers_hand) < 17:
+            self.dealers_hand.append(deal(self.shoe))
+            if self.bust(self.dealers_hand):
+                return 'Bust'
+        return 'Stand'
+
+# Tests
 bj = BlackJack()
-# IT FUCKING WORKS
-# As I tested...
-print(bj.basic_strategy(['Ace of Clubs', 'Ace of Hearts', 'Ace of Spades'])) # Split
+
+#Every player can have MULTIPLE hands, so we need to loop through each hand
+# If a player splits, they will have multiple hands
+# So every player has a BETS attribute, which is a list of bets for each hand
+# Every player has a HANDS attribute, which is a list of hands
+
+class BJPlayer:
+    def __init__(self, bal: int, first_bet: int):
+        self.balance = bal
+        self.bets = [first_bet]
+
+        self.round = []
+
