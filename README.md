@@ -6,7 +6,7 @@
 
 ### Current Status
 
-**This repository is under active development.**
+This repository is under active development.
 
 ### Planned Features
 
